@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../menu.dart';
 import 'package:image_sequence_animator/image_sequence_animator.dart';
 
 class SplashPage extends StatefulWidget {
@@ -35,8 +34,8 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _onFinishPlaying(ImageSequenceAnimatorState _imageSequenceAnimator) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const FirstPage()));
+    Navigator.pushNamed(context, "/login");
+    //Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route route) => false);
   }
 
   @override
@@ -53,7 +52,9 @@ class _SplashPageState extends State<SplashPage> {
                 padding: const EdgeInsets.all(25),
                 child: ImageSequenceAnimator(
                     "assets/splash", "logo-animado-sprites", 0, 2, "png", 37,
-                    isAutoPlay: true, onFinishPlaying: _onFinishPlaying)),
+                    isAutoPlay: true,
+                    onFinishPlaying: _onFinishPlaying,
+                    fps: 50)),
           ),
         ],
       ),

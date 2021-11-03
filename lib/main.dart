@@ -9,6 +9,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prueba/menu.dart';
 import 'splash/splash.dart';
 
 void main() => runApp(const MyApp());
@@ -24,7 +25,11 @@ class MyApp extends StatelessWidget {
       title: 'Image Sequence Animator Demo',
       theme: ThemeData(
           primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.black),
-      home: const SplashPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashPage(),
+        '/login': (context) => const FirstPage(),
+      },
     );
   }
 }
