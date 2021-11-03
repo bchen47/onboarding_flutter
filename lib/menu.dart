@@ -8,10 +8,15 @@ class FirstPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("First Page"),
+        title: const Text("Bienvenido"),
       ),
       body: const Center(
-        child: Text("You're on the first page!"),
+        child: Text(
+          "Bienvenido",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }
