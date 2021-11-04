@@ -34,8 +34,10 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _onFinishPlaying(ImageSequenceAnimatorState _imageSequenceAnimator) {
-    Navigator.pushNamed(context, "/login");
-    //Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route route) => false);
+    //Navigator.pushNamed(context, "/welcome");
+    _imageSequenceAnimator.stop();
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/welcome', (Route route) => false);
   }
 
   @override

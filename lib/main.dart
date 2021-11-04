@@ -10,6 +10,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prueba/login/login.dart';
+import 'package:prueba/login/welcome.dart';
+import 'package:prueba/login/register_options.dart';
 import 'splash/splash.dart';
 
 void main() => runApp(const MyApp());
@@ -28,7 +30,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashPage(),
-        '/login': (context) => const FirstPage(),
+        '/welcome': (context) => const WelcomePage(),
+        '/registerOptions': (context) => const RegisterOptions(),
+        '/login': (context) => const LoginPage()
       },
     );
   }
