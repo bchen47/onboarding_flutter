@@ -9,7 +9,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prueba/menu.dart';
+import 'package:prueba/login/login.dart';
 import 'splash/splash.dart';
 
 void main() => runApp(const MyApp());
