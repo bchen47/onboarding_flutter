@@ -9,10 +9,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prueba/login/login.dart';
-import 'package:prueba/login/welcome.dart';
-import 'package:prueba/login/register_options.dart';
-import 'splash/splash.dart';
+import 'package:prueba/pages/login/login.dart';
+import 'package:prueba/pages/login/welcome.dart';
+import 'package:prueba/pages/login/register_options.dart';
+import 'pages/splash/splash.dart';
 
 void main() => runApp(const MyApp());
 
