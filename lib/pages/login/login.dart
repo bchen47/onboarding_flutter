@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prueba/pages/utils/style.dart';
+import 'package:prueba/src/bloc/bloc.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({
@@ -26,31 +27,54 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget emailField() {
-    return const TextField(
-        keyboardType: TextInputType.emailAddress,
-        style: TextStyle(color: Colors.grey),
-        decoration: InputDecoration(
-          hintText: "Email",
-          prefixIcon: Icon(Icons.email, color: Colors.grey),
-          hintStyle: TextStyle(color: Colors.grey),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-          ),
-        ));
+    return StreamBuilder(
+        stream: bloc.email,
+        builder: (context, snapshot) {
+          return TextField(
+              onChanged: bloc.changeEmail,
+              keyboardType: TextInputType.emailAddress,
+              style: const TextStyle(color: Colors.grey),
+              decoration: InputDecoration(
+                hintText: "Email",
+                prefixIcon: const Icon(Icons.email, color: Colors.grey),
+                hintStyle: const TextStyle(color: Colors.grey),
+                errorText:
+                    snapshot.error == null ? null : snapshot.error.toString(),
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+              ));
+        });
   }
 
   Widget passwordField() {
-    return const TextField(
-      obscureText: true,
-      style: TextStyle(color: Colors.grey),
-      decoration: InputDecoration(
-        hintText: "Contraseña",
-        hintStyle: TextStyle(color: Colors.grey),
-        prefixIcon: Icon(Icons.lock, color: Colors.grey),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.cyan),
-        ),
-      ),
-    );
+    return StreamBuilder(
+        stream: bloc.password,
+        builder: (context, snapshot) {
+          return TextField(
+              obscureText: true,
+              onChanged: bloc.changePassword,
+              style: const TextStyle(color: Colors.grey),
+              decoration: InputDecoration(
+                  errorText:
+                      snapshot.error == null ? null : snapshot.error.toString(),
+                  hintText: "Contraseña",
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  prefixIcon: const Icon(Icons.lock, color: Colors.grey),
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.cyan),
+                  ) /*,
+        suffixIcon: IconButton(
+            icon: Icon(
+              // Based on passwordVisible state choose the icon
+               true
+               ? Icons.visibility
+               : Icons.visibility_off,
+               color: Colors.grey,
+               ),  
+               onPressed: const ()=>{},           
+            ),*/
+                  ));
+        });
   }
 }
