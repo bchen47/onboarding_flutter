@@ -13,6 +13,8 @@ abstract class Customs {
       String text, dynamic onClick, MaterialStateProperty<Color> color) {
     return TextButton(
       style: ButtonStyle(
+          minimumSize:
+              MaterialStateProperty.all<Size>(const Size(double.infinity, 30)),
           backgroundColor: color,
           foregroundColor: MaterialStateProperty.all(Colors.white)),
       onPressed: onClick,
