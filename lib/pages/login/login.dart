@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/pages/utils/style.dart';
 import 'package:prueba/src/bloc/bloc.dart';
 
@@ -48,13 +49,15 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget passwordField() {
-    return StreamBuilder(
-        stream: bloc.password,
+    return BlocBuilder<LoginBloc, LoginState>(
+        buildWhen: (previous, current) => previous.username != current.username,
         builder: (context, snapshot) {
           return TextField(
               obscureText: true,
-              onChanged: bloc.changePassword,
+              //onChanged: bloc.changePassword,
               style: const TextStyle(color: Colors.grey),
+              onChanged: (username) =>
+                  context.read<LoginBloc>().add(LoginUsernameChanged(username)),
               decoration: InputDecoration(
                   errorText:
                       snapshot.error == null ? null : snapshot.error.toString(),
