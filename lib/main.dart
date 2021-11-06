@@ -12,14 +12,22 @@ import 'package:flutter/material.dart';
 import 'package:prueba/pages/login/login.dart';
 import 'package:prueba/pages/login/welcome.dart';
 import 'package:prueba/pages/login/register_options.dart';
+import 'package:prueba/src/bloc/authentication_repository.dart';
+import 'package:prueba/src/bloc/user_repository.dart';
 import 'pages/splash/splash.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(MyApp(
+    authenticationRepository: AuthenticationRepository(),
+    userRepository: UserRepository()));
 
 class MyApp extends StatelessWidget {
   const MyApp({
     Key? key,
+    required this.authenticationRepository,
+    required this.userRepository,
   }) : super(key: key);
+  final AuthenticationRepository authenticationRepository;
+  final UserRepository userRepository;
 
   @override
   Widget build(BuildContext context) {
