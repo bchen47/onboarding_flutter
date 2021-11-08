@@ -27,12 +27,6 @@ class LoginPage extends StatelessWidget {
                 emailField(),
                 passwordField(),
                 Container(margin: const EdgeInsets.only(top: 20)),
-                /*BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-                  return Customs.button(
-                      "INICIAR SESIÓN",
-                      login(state.username, state.password),
-                      MaterialStateProperty.all(Colors.orange));
-                })*/
                 _LoginButton()
               ]),
             )));
@@ -46,7 +40,6 @@ class LoginPage extends StatelessWidget {
             key: const Key('loginForm_usernameInput_textField'),
             onChanged: (username) => {
               context.read<LoginBloc>().add(LoginUsernameChanged(username)),
-              print(state.username)
             },
             style: const TextStyle(color: Colors.grey),
             decoration: InputDecoration(
@@ -59,24 +52,6 @@ class LoginPage extends StatelessWidget {
                 )),
           );
         });
-    /*return StreamBuilder(
-        stream: bloc.email,
-        builder: (context, snapshot) {
-          return TextField(
-              onChanged: bloc.changeEmail,
-              keyboardType: TextInputType.emailAddress,
-              style: const TextStyle(color: Colors.grey),
-              decoration: InputDecoration(
-                hintText: "Email",
-                prefixIcon: const Icon(Icons.email, color: Colors.grey),
-                hintStyle: const TextStyle(color: Colors.grey),
-                errorText:
-                    snapshot.error == null ? null : snapshot.error.toString(),
-                enabledBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-              ));
-        });*/
   }
 
   Widget passwordField() {

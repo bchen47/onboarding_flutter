@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:prueba/src/bloc/user_repository.dart';
+import 'package:prueba/src/models/user.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
+  final _token = StreamController<String>();
 
   Stream<AuthenticationStatus> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
@@ -16,8 +19,6 @@ class AuthenticationRepository {
     required String username,
     required String password,
   }) async {
-    print(username);
-    print(password);
     var url = Uri.parse('https://bestcycling.com/oauth/token');
     var response = await http.post(url, body: {
       'grant_type': 'password',
@@ -25,7 +26,8 @@ class AuthenticationRepository {
       'username': username,
       'password': password
     });
-    print(response.statusCode);
+    _token.add(response.body);
+    _controller.add(AuthenticationStatus.authenticated);
   }
 
   void logOut() {
