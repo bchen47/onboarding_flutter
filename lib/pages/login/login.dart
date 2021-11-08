@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:prueba/pages/utils/style.dart';
 import 'package:prueba/src/bloc/authentication_repository.dart';
 import 'package:prueba/pages/login/bloc/login_bloc.dart';
@@ -26,11 +27,13 @@ class LoginPage extends StatelessWidget {
                 emailField(),
                 passwordField(),
                 Container(margin: const EdgeInsets.only(top: 20)),
-                Container(
-                    child: Customs.button(
-                        "INICIAR SESIÓN",
-                        () => {Navigator.pushNamed(context, "/login")},
-                        MaterialStateProperty.all(Colors.orange)))
+                /*BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+                  return Customs.button(
+                      "INICIAR SESIÓN",
+                      login(state.username, state.password),
+                      MaterialStateProperty.all(Colors.orange));
+                })*/
+                _LoginButton()
               ]),
             )));
   }
@@ -41,8 +44,10 @@ class LoginPage extends StatelessWidget {
         builder: (context, state) {
           return TextField(
             key: const Key('loginForm_usernameInput_textField'),
-            onChanged: (username) =>
-                context.read<LoginBloc>().add(LoginUsernameChanged(username)),
+            onChanged: (username) => {
+              context.read<LoginBloc>().add(LoginUsernameChanged(username)),
+              print(state.username)
+            },
             style: const TextStyle(color: Colors.grey),
             decoration: InputDecoration(
                 errorText: state.username.invalid ? 'invalid username' : null,
@@ -84,10 +89,11 @@ class LoginPage extends StatelessWidget {
             builder: (context, state) {
               return TextField(
                   key: const Key('loginForm_passwordInput_textField'),
-                  onChanged: (username) => context
+                  onChanged: (password) => context
                       .read<LoginBloc>()
-                      .add(LoginUsernameChanged(username)),
+                      .add(LoginPasswordChanged(password)),
                   obscureText: true,
+                  style: const TextStyle(color: Colors.grey),
                   decoration: InputDecoration(
                     errorText:
                         state.password.invalid ? 'invalid password' : null,
@@ -126,5 +132,22 @@ class LoginPage extends StatelessWidget {
             ),*/
           );
         });
+  }
+}
+
+class _LoginButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginBloc, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return state.status.index == FormzStatus.submissionInProgress.index
+            ? const CircularProgressIndicator()
+            : Customs.button(
+                "INICIAR SESIÓN",
+                () => {context.read<LoginBloc>().add(const LoginSubmitted())},
+                MaterialStateProperty.all(Colors.orange));
+      },
+    );
   }
 }
