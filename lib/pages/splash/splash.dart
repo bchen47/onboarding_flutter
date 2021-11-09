@@ -2,9 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_sequence_animator/image_sequence_animator.dart';
+import 'package:prueba/pages/login/welcome.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => const SplashPage());
+  }
 
   @override
   _SplashPageState createState() => _SplashPageState();
@@ -36,8 +40,10 @@ class _SplashPageState extends State<SplashPage> {
   void _onFinishPlaying(ImageSequenceAnimatorState _imageSequenceAnimator) {
     //Navigator.pushNamed(context, "/welcome");
     _imageSequenceAnimator.stop();
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil('/welcome', (Route route) => false);
+    Navigator.of(context).pushAndRemoveUntil<void>(
+      WelcomePage.route(),
+      (route) => false,
+    );
   }
 
   @override

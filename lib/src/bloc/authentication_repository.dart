@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:prueba/src/bloc/user_repository.dart';
-import 'package:prueba/src/models/user.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -15,11 +13,8 @@ class AuthenticationStatusLogin {
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatusLogin>();
 
-  Stream<AuthenticationStatusLogin> get status async* {
-    await Future<void>.delayed(const Duration(seconds: 1));
-    yield AuthenticationStatusLogin(
-        status: AuthenticationStatus.unauthenticated);
-    yield* _controller.stream;
+  Stream<AuthenticationStatusLogin> get status {
+    return _controller.stream;
   }
 
   Future<void> logIn({
@@ -33,7 +28,6 @@ class AuthenticationRepository {
       'username': username,
       'password': password
     });
-    print(response.body);
     _controller.add(AuthenticationStatusLogin(
         status: AuthenticationStatus.authenticated, token: response.body));
   }

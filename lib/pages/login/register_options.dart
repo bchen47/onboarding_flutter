@@ -5,6 +5,10 @@ class RegisterOptions extends StatelessWidget {
   const RegisterOptions({
     Key? key,
   }) : super(key: key);
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => const RegisterOptions());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

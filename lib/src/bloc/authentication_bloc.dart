@@ -18,7 +18,7 @@ class AuthenticationBloc
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
-      (status) => {print("mierdas"), add(AuthenticationStatusChanged(status))},
+      (status) => {add(AuthenticationStatusChanged(status))},
     );
   }
 
@@ -39,12 +39,13 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     print("movidas");
+    print(event.status);
+
     switch (event.status.status) {
       case AuthenticationStatus.unauthenticated:
         return emit(const AuthenticationState.unauthenticated());
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
-        print(event.status);
         return emit(user != null
             ? AuthenticationState.authenticated(user, event.status.token)
             : const AuthenticationState.unauthenticated());

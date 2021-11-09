@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:prueba/pages/login/login.dart';
+import 'package:prueba/pages/login/register_options.dart';
 import 'package:prueba/pages/utils/style.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({
     Key? key,
   }) : super(key: key);
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => const WelcomePage());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,12 +46,12 @@ class WelcomePage extends StatelessWidget {
           Expanded(
               child: Customs.button(
                   "EMPIEZA AHORA",
-                  () => {Navigator.pushNamed(context, "/registerOptions")},
+                  () => {Navigator.push(context, RegisterOptions.route())},
                   MaterialStateProperty.all(Colors.orange))),
           Expanded(
               child: Customs.button(
                   "INICIAR SESIÓN",
-                  () => {Navigator.pushNamed(context, "/login")},
+                  () => {Navigator.push(context, LoginPage.route())},
                   MaterialStateProperty.all(Colors.black)))
         ]));
   }
