@@ -5,13 +5,20 @@ import 'package:prueba/src/models/user.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
-class AuthenticationRepository {
-  final _controller = StreamController<AuthenticationStatus>();
-  final _token = StreamController<String>();
+class AuthenticationStatusLogin {
+  AuthenticationStatus status;
+  String token;
+  AuthenticationStatusLogin(
+      {this.status = AuthenticationStatus.unknown, this.token = ""});
+}
 
-  Stream<AuthenticationStatus> get status async* {
+class AuthenticationRepository {
+  final _controller = StreamController<AuthenticationStatusLogin>();
+
+  Stream<AuthenticationStatusLogin> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
-    yield AuthenticationStatus.unauthenticated;
+    yield AuthenticationStatusLogin(
+        status: AuthenticationStatus.unauthenticated);
     yield* _controller.stream;
   }
 
@@ -26,12 +33,14 @@ class AuthenticationRepository {
       'username': username,
       'password': password
     });
-    _token.add(response.body);
-    _controller.add(AuthenticationStatus.authenticated);
+    print(response.body);
+    _controller.add(AuthenticationStatusLogin(
+        status: AuthenticationStatus.authenticated, token: response.body));
   }
 
   void logOut() {
-    _controller.add(AuthenticationStatus.unauthenticated);
+    _controller.add(AuthenticationStatusLogin(
+        status: AuthenticationStatus.unauthenticated));
   }
 
   void dispose() => _controller.close();
