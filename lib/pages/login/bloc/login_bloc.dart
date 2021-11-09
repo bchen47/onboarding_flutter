@@ -13,6 +13,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         super(const LoginState()) {
     on<LoginUsernameChanged>(_onUsernameChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
+    on<LoginVisibilityChanged>(_onVisibilityChanged);
     on<LoginSubmitted>(_onSubmitted);
   }
 
@@ -27,6 +28,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       username: username,
       status: Formz.validate([state.password, username]),
     ));
+  }
+
+  void _onVisibilityChanged(
+    LoginVisibilityChanged event,
+    Emitter<LoginState> emit,
+  ) {
+    emit(
+      state.copyWith(visible: event.visibility),
+    );
   }
 
   void _onPasswordChanged(
@@ -44,17 +54,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginSubmitted event,
     Emitter<LoginState> emit,
   ) async {
-    /*if (state.status.isValidated) {
+    if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
-      try {*/
-    await _authenticationRepository.logIn(
-      username: state.username.value,
-      password: state.password.value,
-    );
-    /*  emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      try {
+        await _authenticationRepository.logIn(
+          username: state.username.value,
+          password: state.password.value,
+        );
+        emit(state.copyWith(status: FormzStatus.submissionSuccess));
       } catch (_) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
       }
-    }*/
+    }
   }
 }

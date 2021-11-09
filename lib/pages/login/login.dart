@@ -47,7 +47,9 @@ class LoginPage extends StatelessWidget {
             },
             style: const TextStyle(color: Colors.grey),
             decoration: InputDecoration(
-                errorText: state.username.invalid ? 'invalid username' : null,
+                errorText: state.username.invalid
+                    ? 'Nombre de usuario no válido'
+                    : null,
                 hintText: "Email",
                 prefixIcon: const Icon(Icons.email, color: Colors.grey),
                 hintStyle: const TextStyle(color: Colors.grey),
@@ -60,57 +62,38 @@ class LoginPage extends StatelessWidget {
 
   Widget passwordField() {
     return BlocBuilder<LoginBloc, LoginState>(
-        buildWhen: (previous, current) => previous.username != current.username,
-        builder: (context, snapshot) {
-          return BlocBuilder<LoginBloc, LoginState>(
-            buildWhen: (previous, current) =>
-                previous.username != current.username,
-            builder: (context, state) {
-              return TextField(
-                  key: const Key('loginForm_passwordInput_textField'),
-                  onChanged: (password) => context
-                      .read<LoginBloc>()
-                      .add(LoginPasswordChanged(password)),
-                  obscureText: true,
-                  style: const TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    errorText:
-                        state.password.invalid ? 'invalid password' : null,
-                    hintText: "Contraseña",
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    prefixIcon: const Icon(Icons.lock, color: Colors.grey),
-                    enabledBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.cyan),
+      buildWhen: (previous, current) =>
+          previous.password != current.password ||
+          previous.visible != current.visible,
+      builder: (context, state) {
+        return TextField(
+            key: const Key('loginForm_passwordInput_textField'),
+            onChanged: (password) =>
+                context.read<LoginBloc>().add(LoginPasswordChanged(password)),
+            obscureText: state.visible,
+            style: const TextStyle(color: Colors.grey),
+            decoration: InputDecoration(
+                errorText:
+                    state.password.invalid ? 'Contraseña inválida' : null,
+                hintText: "Contraseña",
+                hintStyle: const TextStyle(color: Colors.grey),
+                prefixIcon: const Icon(Icons.lock, color: Colors.grey),
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.cyan),
+                ),
+                suffixIcon: IconButton(
+                    icon: Icon(
+                      // Based on passwordVisible state choose the icon
+                      state.visible ? Icons.visibility : Icons.visibility_off,
+                      color: Colors.grey,
                     ),
-                  ));
-            },
-            /*return TextField(
-              obscureText: true,
-              //onChanged: bloc.changePassword,
-              style: const TextStyle(color: Colors.grey),
-              onChanged: (username) =>
-                  context.read<LoginBloc>().add(LoginUsernameChanged(username)),
-              decoration: InputDecoration(
-                  errorText:
-                      snapshot.error == null ? null : snapshot.error.toString(),
-                  hintText: "Contraseña",
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  prefixIcon: const Icon(Icons.lock, color: Colors.grey),
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.cyan),
-                  ) */ /*,
-        suffixIcon: IconButton(
-            icon: Icon(
-              // Based on passwordVisible state choose the icon
-               true
-               ? Icons.visibility
-               : Icons.visibility_off,
-               color: Colors.grey,
-               ),  
-               onPressed: const ()=>{},           
-            ),*/
-          );
-        });
+                    onPressed: () {
+                      context
+                          .read<LoginBloc>()
+                          .add(LoginVisibilityChanged(!state.visible));
+                    })));
+      },
+    );
   }
 }
 

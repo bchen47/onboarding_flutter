@@ -28,3 +28,10 @@ class LoginPasswordChanged extends LoginEvent {
 class LoginSubmitted extends LoginEvent {
   const LoginSubmitted();
 }
+
+class LoginVisibilityChanged extends LoginEvent {
+  const LoginVisibilityChanged(this.visibility);
+  final bool visibility;
+  @override
+  List<Object> get props => [visibility];
+}

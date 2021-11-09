@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
@@ -28,8 +29,11 @@ class AuthenticationRepository {
       'username': username,
       'password': password
     });
-    _controller.add(AuthenticationStatusLogin(
-        status: AuthenticationStatus.authenticated, token: response.body));
+    if (response.statusCode == 200) {
+      _controller.add(AuthenticationStatusLogin(
+          status: AuthenticationStatus.authenticated,
+          token: jsonDecode(response.body)["access_token"]));
+    }
   }
 
   void logOut() {
