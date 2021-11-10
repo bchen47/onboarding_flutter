@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:prueba/src/models/token.dart';
+
 import 'user_repository.dart';
 import 'authentication_repository.dart';
 import 'package:bloc/bloc.dart';

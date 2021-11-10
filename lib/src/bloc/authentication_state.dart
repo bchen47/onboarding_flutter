@@ -4,11 +4,11 @@ class AuthenticationState extends Equatable {
   const AuthenticationState._(
       {this.status = AuthenticationStatus.unknown,
       this.user = User.empty,
-      this.token = ""});
+      this.token = Token.empty});
 
   const AuthenticationState.unknown() : this._();
 
-  const AuthenticationState.authenticated(User user, String token)
+  const AuthenticationState.authenticated(User user, Token token)
       : this._(
             status: AuthenticationStatus.authenticated,
             user: user,
@@ -18,10 +18,10 @@ class AuthenticationState extends Equatable {
       : this._(status: AuthenticationStatus.unauthenticated);
   final AuthenticationStatus status;
   final User user;
-  final String token;
+  final Token token;
 
   AuthenticationState copyWith(
-      {User? user, String? token, AuthenticationStatus? status}) {
+      {User? user, Token? token, AuthenticationStatus? status}) {
     return AuthenticationState._(
       user: user ?? this.user,
       token: token ?? this.token,
@@ -30,5 +30,5 @@ class AuthenticationState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, user];
+  List<Object> get props => [status, user, token];
 }
