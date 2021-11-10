@@ -2,38 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:prueba/pages/utils/style.dart';
-import 'package:prueba/src/bloc/authentication_repository.dart';
 import 'package:prueba/pages/login/bloc/login_bloc.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({
+class LoginForm extends StatelessWidget {
+  const LoginForm({
     Key? key,
   }) : super(key: key);
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => const LoginPage());
+    return MaterialPageRoute<void>(builder: (_) => const LoginForm());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: Customs.appBar("Iniciar sesión"),
-        extendBodyBehindAppBar: true,
-        body: Container(
-            margin: const EdgeInsets.only(top: 60, left: 10, right: 10),
-            child: BlocProvider(
-              create: (context) {
-                return LoginBloc(
-                  authenticationRepository:
-                      RepositoryProvider.of<AuthenticationRepository>(context),
-                );
-              },
-              child: Column(children: [
-                emailField(),
-                passwordField(),
-                Container(margin: const EdgeInsets.only(top: 20)),
-                _LoginButton()
-              ]),
-            )));
+    return BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(content: Text('Error en el login')),
+              );
+          }
+        },
+        child: Container(
+          margin: const EdgeInsets.only(top: 60, left: 10, right: 10),
+          child: Column(children: [
+            emailField(),
+            passwordField(),
+            Container(margin: const EdgeInsets.only(top: 20)),
+            _LoginButton(),
+          ]),
+        ));
   }
 
   Widget emailField() {
@@ -107,7 +106,9 @@ class _LoginButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : Customs.button(
                 "INICIAR SESIÓN",
-                () => {context.read<LoginBloc>().add(const LoginSubmitted())},
+                () => {
+                      context.read<LoginBloc>().add(const LoginSubmitted()),
+                    },
                 MaterialStateProperty.all(Colors.orange));
       },
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prueba/pages/login/login.dart';
-import 'package:prueba/pages/login/register_options.dart';
+import 'package:prueba/pages/login/pages/login_page.dart';
+import 'package:prueba/pages/login/pages/register_options.dart';
 import 'package:prueba/pages/utils/style.dart';
 
 class WelcomePage extends StatelessWidget {

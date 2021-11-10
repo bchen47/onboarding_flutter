@@ -4,6 +4,11 @@ import 'package:http/http.dart' as http;
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
+class UnAuthenticated implements Exception {
+  String cause;
+  UnAuthenticated(this.cause);
+}
+
 class AuthenticationStatusLogin {
   AuthenticationStatus status;
   String token;
@@ -33,6 +38,8 @@ class AuthenticationRepository {
       _controller.add(AuthenticationStatusLogin(
           status: AuthenticationStatus.authenticated,
           token: jsonDecode(response.body)["access_token"]));
+    } else {
+      throw UnAuthenticated("Error con el login");
     }
   }
 
