@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:prueba/pages/login/pages/login_page.dart';
 import 'package:prueba/pages/utils/style.dart';
 import 'package:prueba/pages/register/bloc/registro_bloc.dart';
 
@@ -22,6 +23,9 @@ class RegisterForm extends StatelessWidget {
               ..showSnackBar(
                 const SnackBar(content: Text('Error en el Registro')),
               );
+          }
+          if (state.status.isSubmissionSuccess) {
+            Navigator.push(context, LoginPage.route());
           }
         },
         child: Container(

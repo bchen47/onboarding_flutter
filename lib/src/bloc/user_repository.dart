@@ -1,13 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:flutter/services.dart';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
 import 'package:uuid/uuid.dart';
-
 import 'package:prueba/src/models/user.dart';
-import 'package:http/http.dart' as http;
 
 class UnAuthenticated implements Exception {
   String cause;
