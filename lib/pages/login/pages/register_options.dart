@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prueba/pages/register/pages/register_page.dart';
 import 'package:prueba/pages/utils/style.dart';
 
 class RegisterOptions extends StatelessWidget {
@@ -24,7 +25,7 @@ class RegisterOptions extends StatelessWidget {
           child: Center(
               child: Customs.button(
                   "REGISTRARME CON EMAIL",
-                  () => {Navigator.pushNamed(context, "/login")},
+                  () => {Navigator.push(context, RegisterPage.route())},
                   MaterialStateProperty.all(Colors.orange))),
         ));
   }
