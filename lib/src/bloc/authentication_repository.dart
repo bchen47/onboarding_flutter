@@ -70,7 +70,6 @@ class AuthenticationRepository {
       'username': username,
       'password': password
     });
-    print(response.body);
     if (response.statusCode == 200) {
       _controller.add(AuthenticationStatusLogin(
           status: AuthenticationStatus.authenticated,
