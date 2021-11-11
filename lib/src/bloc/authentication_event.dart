@@ -19,3 +19,14 @@ class AuthenticationStatusChanged extends AuthenticationEvent {
 }
 
 class AuthenticationLogoutRequested extends AuthenticationEvent {}
+
+class LogIn extends AuthenticationEvent {
+  const LogIn(
+    this.token,
+  );
+
+  final String token;
+
+  @override
+  List<Object> get props => [token];
+}

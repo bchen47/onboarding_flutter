@@ -19,6 +19,7 @@ class AuthenticationBloc
         super(const AuthenticationState.unknown()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
+    on<LogIn>(_tryGetUser);
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
       (status) => {add(AuthenticationStatusChanged(status))},
     );
@@ -44,10 +45,7 @@ class AuthenticationBloc
       case AuthenticationStatus.unauthenticated:
         return emit(const AuthenticationState.unauthenticated());
       case AuthenticationStatus.authenticated:
-        final user = await _tryGetUser(event.status.token.accessToken);
-        return emit(user != null
-            ? AuthenticationState.authenticated(user, event.status.token)
-            : const AuthenticationState.unauthenticated());
+        return emit(AuthenticationState.authenticated(event.status.token));
       default:
         return emit(const AuthenticationState.unknown());
     }
@@ -60,9 +58,10 @@ class AuthenticationBloc
     _authenticationRepository.logOut();
   }
 
-  Future<User?> _tryGetUser(String token) async {
+  Future<User?> _tryGetUser(
+      LogIn event, Emitter<AuthenticationState> emit) async {
     try {
-      final user = _userRepository.getUser(token);
+      final user = _userRepository.getUser(event.token);
       return user;
     } catch (_) {
       return null;

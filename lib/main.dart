@@ -12,8 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/pages/private/home/pages/home_page.dart';
 import 'package:prueba/pages/public/login/pages/login_page.dart';
+import 'package:prueba/pages/public/login/pages/welcome.dart';
 import 'package:prueba/src/bloc/authentication_bloc.dart';
 import 'package:prueba/src/bloc/authentication_repository.dart';
+import 'package:prueba/src/bloc/user_bloc.dart';
 import 'package:prueba/src/bloc/user_repository.dart';
 import 'pages/splash/splash.dart';
 
@@ -36,12 +38,16 @@ class App extends StatelessWidget {
     return RepositoryProvider.value(
       value: authenticationRepository,
       child: BlocProvider(
-        create: (_) => AuthenticationBloc(
-          authenticationRepository: authenticationRepository,
-          userRepository: userRepository,
-        ),
-        child: const AppView(),
-      ),
+          create: (_) => AuthenticationBloc(
+                authenticationRepository: authenticationRepository,
+                userRepository: userRepository,
+              ),
+          child: RepositoryProvider.value(
+              value: userRepository,
+              child: BlocProvider(
+                create: (_) => UserBloc(userRepository: userRepository),
+                child: const AppView(),
+              ))),
     );
   }
 }

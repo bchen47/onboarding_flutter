@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/pages/private/home/bloc/home_bloc.dart';
-import 'package:prueba/pages/utils/style.dart';
+import 'package:prueba/src/bloc/authentication_bloc.dart';
 import 'package:prueba/src/bloc/authentication_repository.dart';
+import 'package:prueba/src/bloc/user_bloc.dart';
+import 'package:prueba/src/bloc/user_repository.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
@@ -44,11 +46,15 @@ class HomePage extends StatelessWidget {
         return HomeBloc(
           authenticationRepository:
               RepositoryProvider.of<AuthenticationRepository>(context),
+          userRepository: RepositoryProvider.of<UserRepository>(context),
         );
       },
-      child: Scaffold(
-        body: home(),
-      ),
+      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+        context.read<AuthenticationBloc>().add(LogIn(state.token.accessToken));
+
+        return Scaffold(body: home());
+      }),
     );
   }
 

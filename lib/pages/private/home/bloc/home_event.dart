@@ -19,3 +19,12 @@ class HomeIndexChanged extends HomeEvent {
 class HomeSubmitted extends HomeEvent {
   const HomeSubmitted();
 }
+
+class HomeLogedIn extends HomeEvent {
+  const HomeLogedIn(this.token);
+
+  final String token;
+
+  @override
+  List<Object> get props => [token];
+}

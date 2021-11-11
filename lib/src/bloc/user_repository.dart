@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
-import 'package:uuid/uuid.dart';
 import 'package:prueba/src/models/user.dart';
 
 class UnAuthenticated implements Exception {
@@ -12,6 +11,7 @@ class UnAuthenticated implements Exception {
 
 class UserRepository {
   User? _user;
+  final _controller = StreamController<User>();
 
   Future<User?> getUser(String accessToken) async {
     if (_user != null) return _user;
@@ -19,12 +19,19 @@ class UserRepository {
         StandardUriDesign(Uri.parse("https://apiv2.bestcycling.es/api/v2/"));
     final client = RoutingClient(uriDesign);
     ResourceFetched response = await client.fetchResource('user', '', headers: {
-      HttpHeaders.contentTypeHeader: 'application/vnd.api+json',
       HttpHeaders.userAgentHeader: "Flutter migration app",
-      HttpHeaders.authorizationHeader: 'Bearer ' +
-          accessToken +
-          ' X-APP-ID: 1d665fac3ced84d799e615f5d5a2c1af'
+      HttpHeaders.authorizationHeader: 'Bearer ' + accessToken,
+      HttpHeaders.contentTypeHeader: 'application/vnd.api+json',
+      'X-APP-ID': '1d665fac3ced84d799e615f5d5a2c1af'
     });
+    // _controller.add(AuthenticationStatusLogin(
+    //       status: AuthenticationStatus.authenticated,
+    //       token: Token(
+    //           jsonDecode(response.body)["access_token"],
+    //           jsonDecode(response.body)["refresh_token"],
+    //           jsonDecode(response.body)["expires_in"].toString(),
+    //           jsonDecode(response.body)["token_type"])));
+    print(response.http);
   }
 
   static Map<String, String> get headers {
@@ -59,4 +66,6 @@ class UserRepository {
       throw UnAuthenticated("Error con el registro");
     }
   }
+
+  void dispose() => _controller.close();
 }
