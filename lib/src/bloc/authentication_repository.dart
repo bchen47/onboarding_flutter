@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:json_api/client.dart';
-import 'package:json_api/routing.dart';
 import 'package:prueba/src/models/token.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }

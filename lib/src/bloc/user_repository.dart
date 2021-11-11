@@ -13,12 +13,18 @@ class UnAuthenticated implements Exception {
 class UserRepository {
   User? _user;
 
-  Future<User?> getUser() async {
+  Future<User?> getUser(String accessToken) async {
     if (_user != null) return _user;
-    return Future.delayed(
-      const Duration(milliseconds: 300),
-      () => _user = User(const Uuid().v4(), ""),
-    );
+    final uriDesign =
+        StandardUriDesign(Uri.parse("https://apiv2.bestcycling.es/api/v2/"));
+    final client = RoutingClient(uriDesign);
+    ResourceFetched response = await client.fetchResource('user', '', headers: {
+      HttpHeaders.contentTypeHeader: 'application/vnd.api+json',
+      HttpHeaders.userAgentHeader: "Flutter migration app",
+      HttpHeaders.authorizationHeader: 'Bearer ' +
+          accessToken +
+          ' X-APP-ID: 1d665fac3ced84d799e615f5d5a2c1af'
+    });
   }
 
   static Map<String, String> get headers {

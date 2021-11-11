@@ -44,7 +44,7 @@ class AuthenticationBloc
       case AuthenticationStatus.unauthenticated:
         return emit(const AuthenticationState.unauthenticated());
       case AuthenticationStatus.authenticated:
-        final user = await _tryGetUser();
+        final user = await _tryGetUser(event.status.token.accessToken);
         return emit(user != null
             ? AuthenticationState.authenticated(user, event.status.token)
             : const AuthenticationState.unauthenticated());
@@ -60,9 +60,9 @@ class AuthenticationBloc
     _authenticationRepository.logOut();
   }
 
-  Future<User?> _tryGetUser() async {
+  Future<User?> _tryGetUser(String token) async {
     try {
-      final user = _userRepository.getUser();
+      final user = _userRepository.getUser(token);
       return user;
     } catch (_) {
       return null;
