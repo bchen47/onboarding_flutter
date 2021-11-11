@@ -1,84 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:prueba/pages/login/pages/login_page.dart';
 import 'package:prueba/pages/utils/style.dart';
-import 'package:prueba/pages/register/bloc/registro_bloc.dart';
+import 'package:prueba/pages/public/login/bloc/login_bloc.dart';
 
-class RegisterForm extends StatelessWidget {
-  const RegisterForm({
+class LoginForm extends StatelessWidget {
+  const LoginForm({
     Key? key,
   }) : super(key: key);
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => const RegisterForm());
+    return MaterialPageRoute<void>(builder: (_) => const LoginForm());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegistroBloc, RegistroState>(
+    return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state.status.isSubmissionFailure) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                const SnackBar(content: Text('Error en el Registro')),
+                const SnackBar(content: Text('Error en el login')),
               );
-          }
-          if (state.status.isSubmissionSuccess) {
-            Navigator.push(context, LoginPage.route());
           }
         },
         child: Container(
           margin: const EdgeInsets.only(top: 60, left: 10, right: 10),
           child: Column(children: [
-            userNameField(),
             emailField(),
             passwordField(),
             Container(margin: const EdgeInsets.only(top: 20)),
-            _RegistroButton(),
+            _LoginButton(),
           ]),
         ));
   }
 
-  Widget userNameField() {
-    return BlocBuilder<RegistroBloc, RegistroState>(
+  Widget emailField() {
+    return BlocBuilder<LoginBloc, LoginState>(
         buildWhen: (previous, current) => previous.username != current.username,
         builder: (context, state) {
           return TextField(
-            key: const Key('RegistroForm_usernameInput_textField'),
+            key: const Key('loginForm_usernameInput_textField'),
             onChanged: (username) => {
-              context
-                  .read<RegistroBloc>()
-                  .add(RegistroUsernameChanged(username)),
+              context.read<LoginBloc>().add(LoginUsernameChanged(username)),
             },
             style: const TextStyle(color: Colors.grey),
             decoration: InputDecoration(
-                border: const UnderlineInputBorder(),
                 errorText: state.username.invalid
                     ? 'Nombre de usuario no válido'
                     : null,
-                hintText: "Nombre y apellidos",
-                prefixIcon: const Icon(Icons.person, color: Colors.grey),
-                hintStyle: const TextStyle(color: Colors.grey),
-                enabledBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                )),
-          );
-        });
-  }
-
-  Widget emailField() {
-    return BlocBuilder<RegistroBloc, RegistroState>(
-        buildWhen: (previous, current) => previous.email != current.email,
-        builder: (context, state) {
-          return TextField(
-            key: const Key('RegistroForm_emailInput_textField'),
-            onChanged: (email) => {
-              context.read<RegistroBloc>().add(RegistroEmailChanged(email)),
-            },
-            style: const TextStyle(color: Colors.grey),
-            decoration: InputDecoration(
-                errorText: state.email.invalid ? 'Correo no válido' : null,
                 hintText: "Email",
                 prefixIcon: const Icon(Icons.email, color: Colors.grey),
                 hintStyle: const TextStyle(color: Colors.grey),
@@ -90,16 +60,15 @@ class RegisterForm extends StatelessWidget {
   }
 
   Widget passwordField() {
-    return BlocBuilder<RegistroBloc, RegistroState>(
+    return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) =>
           previous.password != current.password ||
           previous.visible != current.visible,
       builder: (context, state) {
         return TextField(
-            key: const Key('RegistroForm_passwordInput_textField'),
-            onChanged: (password) => context
-                .read<RegistroBloc>()
-                .add(RegistroPasswordChanged(password)),
+            key: const Key('loginForm_passwordInput_textField'),
+            onChanged: (password) =>
+                context.read<LoginBloc>().add(LoginPasswordChanged(password)),
             obscureText: state.visible,
             style: const TextStyle(color: Colors.grey),
             decoration: InputDecoration(
@@ -119,28 +88,26 @@ class RegisterForm extends StatelessWidget {
                     ),
                     onPressed: () {
                       context
-                          .read<RegistroBloc>()
-                          .add(RegistroVisibilityChanged(!state.visible));
+                          .read<LoginBloc>()
+                          .add(LoginVisibilityChanged(!state.visible));
                     })));
       },
     );
   }
 }
 
-class _RegistroButton extends StatelessWidget {
+class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegistroBloc, RegistroState>(
+    return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status.index == FormzStatus.submissionInProgress.index
             ? const CircularProgressIndicator()
             : Customs.button(
-                "REGISTRARME",
+                "INICIAR SESIÓN",
                 () => {
-                      context
-                          .read<RegistroBloc>()
-                          .add(const RegistroSubmitted()),
+                      context.read<LoginBloc>().add(const LoginSubmitted()),
                     },
                 MaterialStateProperty.all(Colors.orange));
       },

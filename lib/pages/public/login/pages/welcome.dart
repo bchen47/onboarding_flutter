@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:prueba/pages/login/pages/login_page.dart';
-import 'package:prueba/pages/login/pages/register_options.dart';
+import 'package:prueba/pages/public/login/pages/login_page.dart';
+import 'package:prueba/pages/public/login/pages/register_options.dart';
+import 'package:prueba/pages/public/register/pages/register_page.dart';
 import 'package:prueba/pages/utils/style.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -11,8 +12,7 @@ class WelcomePage extends StatelessWidget {
     return MaterialPageRoute<void>(builder: (_) => const WelcomePage());
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildHomeRoute(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -27,6 +27,20 @@ class WelcomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [textLogin(), rowButton(context)]),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      routes: {
+        "/": (BuildContext context) => _buildHomeRoute(context),
+        "/login": (BuildContext context) => const LoginPage(),
+        "/register": (BuildContext context) => const RegisterPage(),
+        "/options": (BuildContext context) => const RegisterOptions()
+      },
+      theme: ThemeData(
+          primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.black),
     );
   }
 
@@ -46,12 +60,12 @@ class WelcomePage extends StatelessWidget {
           Expanded(
               child: Customs.button(
                   "EMPIEZA AHORA",
-                  () => {Navigator.push(context, RegisterOptions.route())},
+                  () => {Navigator.pushNamed(context, "/options")},
                   MaterialStateProperty.all(Colors.orange))),
           Expanded(
               child: Customs.button(
                   "INICIAR SESIÓN",
-                  () => {Navigator.push(context, LoginPage.route())},
+                  () => {Navigator.pushNamed(context, "/login")},
                   MaterialStateProperty.all(Colors.black)))
         ]));
   }

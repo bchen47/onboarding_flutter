@@ -10,8 +10,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prueba/pages/login/pages/login_page.dart';
-import 'package:prueba/pages/login/pages/welcome.dart';
+import 'package:prueba/pages/public/login/pages/login_page.dart';
+import 'package:prueba/pages/public/login/pages/welcome.dart';
 import 'package:prueba/src/bloc/authentication_bloc.dart';
 import 'package:prueba/src/bloc/authentication_repository.dart';
 import 'package:prueba/src/bloc/user_repository.dart';

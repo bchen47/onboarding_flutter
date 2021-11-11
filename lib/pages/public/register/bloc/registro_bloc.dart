@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:prueba/pages/register/models/models.dart';
+import 'package:prueba/pages/public/register/models/models.dart';
 import 'package:prueba/src/bloc/user_repository.dart';
 part 'registro_event.dart';
 part 'registro_state.dart';
