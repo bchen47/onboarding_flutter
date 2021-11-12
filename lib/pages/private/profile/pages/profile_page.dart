@@ -76,7 +76,12 @@ class ProfilePage extends StatelessWidget {
 
   Widget middleStatsItemRow(state) {
     return Container(
-        padding: const EdgeInsets.all(30.0),
+        decoration: const BoxDecoration(
+            border: Border(
+                top: BorderSide(color: Colors.grey),
+                bottom: BorderSide(color: Colors.grey))),
+        padding: const EdgeInsets.only(
+            top: 10.0, right: 30.0, left: 30.0, bottom: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
