@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
-import 'package:prueba/src/bloc/user_bloc.dart';
 import 'package:prueba/src/models/user.dart';
 
 class UnAuthenticated implements Exception {
@@ -13,6 +12,9 @@ class UnAuthenticated implements Exception {
 class UserRepository {
   User? _user;
   final _controller = StreamController<User>();
+  Stream<User> get status {
+    return _controller.stream;
+  }
 
   Future<User?> getUser(String accessToken) async {
     if (_user != null) return _user;

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/src/bloc/user_repository.dart';
 import 'package:prueba/src/models/user.dart';
@@ -13,13 +15,17 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UserStatusChanged>(_onUserStatusChanged);
     on<UserLogoutRequested>(_onUserLogoutRequested);
     on<UserLogedIn>(_onUserLoggedIn);
+    _userLoginSuscription = _userRepository.status.listen(
+      (status) => {add(UserStatusChanged(status))},
+    );
   }
 
   final UserRepository _userRepository;
-
+  late StreamSubscription<User> _userLoginSuscription;
   @override
   Future<void> close() {
     _userRepository.dispose();
+    _userLoginSuscription.cancel();
     return super.close();
   }
 
@@ -34,7 +40,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UserStatusChanged event,
     Emitter<UserState> emit,
   ) async {
-    return emit(state.copyWith(user: event.status.user));
+    return emit(state.copyWith(user: event.status));
   }
 
   void _onUserLogoutRequested(

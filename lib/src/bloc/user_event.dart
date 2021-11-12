@@ -12,7 +12,7 @@ class UserStatusChanged extends UserEvent {
     this.status,
   );
 
-  final UserState status;
+  final User status;
 
   @override
   List<Object> get props => [status];
