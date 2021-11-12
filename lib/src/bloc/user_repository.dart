@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
+import 'package:prueba/src/bloc/user_bloc.dart';
 import 'package:prueba/src/models/user.dart';
 
 class UnAuthenticated implements Exception {
@@ -24,14 +25,12 @@ class UserRepository {
       HttpHeaders.contentTypeHeader: 'application/vnd.api+json',
       'X-APP-ID': '1d665fac3ced84d799e615f5d5a2c1af'
     });
-    // _controller.add(AuthenticationStatusLogin(
-    //       status: AuthenticationStatus.authenticated,
-    //       token: Token(
-    //           jsonDecode(response.body)["access_token"],
-    //           jsonDecode(response.body)["refresh_token"],
-    //           jsonDecode(response.body)["expires_in"].toString(),
-    //           jsonDecode(response.body)["token_type"])));
-    print(response.http);
+    if (!response.http.isFailed && response.http.hasDocument) {
+      _controller.add(User(response.resource.attributes));
+      //response.resource.attributes
+    } else {
+      throw UnAuthenticated("No ha podido cargar el usuario");
+    }
   }
 
   static Map<String, String> get headers {
