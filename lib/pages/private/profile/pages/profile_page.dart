@@ -94,6 +94,12 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget MiddleStatsItem(String level, String label) {
-    return Column(children: [Text(level), Text(label)]);
+    return Column(children: [
+      Text(
+        level,
+        style: optionStyle,
+      ),
+      Text(label, style: const TextStyle(fontSize: 14, color: Colors.grey))
+    ]);
   }
 }
