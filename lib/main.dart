@@ -11,6 +11,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/pages/private/home/pages/home_page.dart';
+import 'package:prueba/pages/private/profile/bloc/profile_bloc.dart';
+import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
 import 'package:prueba/pages/public/login/pages/login_page.dart';
 import 'package:prueba/src/bloc/authentication_bloc.dart';
 import 'package:prueba/src/bloc/authentication_repository.dart';
@@ -19,18 +21,22 @@ import 'package:prueba/src/bloc/user_repository.dart';
 import 'pages/splash/splash.dart';
 
 void main() => runApp(App(
-    authenticationRepository: AuthenticationRepository(),
-    userRepository: UserRepository()));
+      authenticationRepository: AuthenticationRepository(),
+      userRepository: UserRepository(),
+      profileRepository: ProfileRepository(),
+    ));
 
 class App extends StatelessWidget {
   const App({
     Key? key,
     required this.authenticationRepository,
     required this.userRepository,
+    required this.profileRepository,
   }) : super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
+  final ProfileRepository profileRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +44,20 @@ class App extends StatelessWidget {
       value: authenticationRepository,
       child: BlocProvider(
           create: (_) => AuthenticationBloc(
-                authenticationRepository: authenticationRepository,
-                userRepository: userRepository,
-              ),
+              authenticationRepository: authenticationRepository,
+              userRepository: userRepository,
+              profileRepository: profileRepository),
           child: RepositoryProvider.value(
               value: userRepository,
               child: BlocProvider(
-                create: (_) => UserBloc(userRepository: userRepository),
-                child: const AppView(),
-              ))),
+                  create: (_) => UserBloc(userRepository: userRepository),
+                  child: RepositoryProvider.value(
+                      value: profileRepository,
+                      child: BlocProvider(
+                        create: (_) =>
+                            ProfileBloc(profileRepository: profileRepository),
+                        child: const AppView(),
+                      ))))),
     );
   }
 }

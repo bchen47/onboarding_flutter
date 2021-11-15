@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
+import 'package:prueba/pages/private/profile/models/profile.dart';
 import 'package:prueba/src/models/token.dart';
 
 import 'user_repository.dart';
@@ -14,12 +16,15 @@ class AuthenticationBloc
   AuthenticationBloc({
     required AuthenticationRepository authenticationRepository,
     required UserRepository userRepository,
+    required ProfileRepository profileRepository,
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
+        _profileRepository = profileRepository,
         super(const AuthenticationState.unknown()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
     on<LogIn>(_tryGetUser);
+    on<GetProfile>(_tryGetProfile);
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
       (status) => {add(AuthenticationStatusChanged(status))},
     );
@@ -27,6 +32,8 @@ class AuthenticationBloc
 
   final AuthenticationRepository _authenticationRepository;
   final UserRepository _userRepository;
+  final ProfileRepository _profileRepository;
+
   late StreamSubscription<AuthenticationStatusLogin>
       _authenticationStatusSubscription;
 
@@ -63,6 +70,16 @@ class AuthenticationBloc
     try {
       final user = _userRepository.getUser(event.token);
       return user;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<Profile?> _tryGetProfile(
+      GetProfile event, Emitter<AuthenticationState> emit) async {
+    try {
+      final profile = _profileRepository.getProfile(event.token);
+      return profile;
     } catch (_) {
       return null;
     }

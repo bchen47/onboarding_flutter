@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/pages/private/home/bloc/home_bloc.dart';
+import 'package:prueba/pages/private/profile/bloc/profile_bloc.dart';
+import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
 import 'package:prueba/pages/private/profile/pages/profile_page.dart';
 import 'package:prueba/src/bloc/authentication_bloc.dart';
 import 'package:prueba/src/bloc/authentication_repository.dart';
@@ -39,27 +41,65 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        return HomeBloc(
-          authenticationRepository:
-              RepositoryProvider.of<AuthenticationRepository>(context),
-          userRepository: RepositoryProvider.of<UserRepository>(context),
-        );
-      },
-      child: BlocProvider(
-          create: (_) => UserBloc(
-              userRepository: RepositoryProvider.of<UserRepository>(context)),
-          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              builder: (context, state) {
-            context.read<UserBloc>();
-            context
-                .read<AuthenticationBloc>()
-                .add(LogIn(state.token.accessToken));
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<HomeBloc>(
+            create: (BuildContext context) => HomeBloc(
+              authenticationRepository:
+                  RepositoryProvider.of<AuthenticationRepository>(context),
+              userRepository: RepositoryProvider.of<UserRepository>(context),
+            ),
+          ),
+          BlocProvider<ProfileBloc>(
+            create: (BuildContext context) => ProfileBloc(
+              profileRepository:
+                  RepositoryProvider.of<ProfileRepository>(context),
+            ),
+          ),
+        ],
+        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+          BlocProvider.of<ProfileBloc>(context);
+          BlocProvider.of<UserBloc>(context);
 
-            return Scaffold(body: home());
-          })),
-    );
+          context
+              .read<AuthenticationBloc>()
+              .add(LogIn(state.token.accessToken));
+          context
+              .read<AuthenticationBloc>()
+              .add(GetProfile(state.token.accessToken));
+          return Scaffold(body: home());
+        })
+
+        // return BlocProvider(
+        //   create: (context) {
+        //     return HomeBloc(
+        //       authenticationRepository:
+        //           RepositoryProvider.of<AuthenticationRepository>(context),
+        //       userRepository: RepositoryProvider.of<UserRepository>(context),
+        //     );
+        //   },
+        //   child: BlocProvider(
+        //       create: (_) => UserBloc(
+        //           userRepository: RepositoryProvider.of<UserRepository>(context)),
+        //       child: BlocProvider(create: (context) {
+        //         return ProfileBloc(
+
+        //           profileRepository:
+        //               RepositoryProvider.of<ProfileRepository>(context),
+        //         );
+        //       }, child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        //           builder: (context, state) {
+        //         context.read<UserBloc>();
+        //         context
+        //             .read<AuthenticationBloc>()
+        //             .add(LogIn(state.token.accessToken));
+        //         context
+        //             .read<AuthenticationBloc>()
+        //             .add(GetProfile(state.token.accessToken));
+        //         return Scaffold(body: home());
+        //       }))),
+        );
   }
 
   /// Get the asset icon for the given tab
@@ -68,19 +108,19 @@ class HomePage extends StatelessWidget {
     final active = tab != _Tab.values[index];
 
     // now given the tab param get its icon considering the fact that if it is active or not
-    if (tab == _Tab.TAB1) {
+    if (tab == _Tab.tab1) {
       return active
           ? 'assets/navigation/IconSearch-OFF@3x.png'
           : 'assets/navigation/IconSearch-ON@3x.png';
-    } else if (tab == _Tab.TAB2) {
+    } else if (tab == _Tab.tab2) {
       return active
           ? 'assets/navigation/IconNutricion-OFF@3x.png'
           : 'assets/navigation/IconNutricion-ON@3x.png';
-    } else if (tab == _Tab.TAB3) {
+    } else if (tab == _Tab.tab3) {
       return active
           ? 'assets/navigation/IconSensei-OFF@3x.png'
           : 'assets/navigation/IconSensei-ON@3x.png';
-    } else if (tab == _Tab.TAB4) {
+    } else if (tab == _Tab.tab4) {
       return active
           ? 'assets/navigation/IconSensei-OFF@3x.png'
           : 'assets/navigation/IconSensei-ON@3x.png';
@@ -99,27 +139,27 @@ class HomePage extends StatelessWidget {
           bottomNavigationBar: BottomNavigationBar(
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Image.asset(_getAssetForTab(_Tab.TAB1, state.index),
+                icon: Image.asset(_getAssetForTab(_Tab.tab1, state.index),
                     width: 24.0, height: 24.0),
                 label: 'Explorar',
               ),
               BottomNavigationBarItem(
-                icon: Image.asset(_getAssetForTab(_Tab.TAB2, state.index),
+                icon: Image.asset(_getAssetForTab(_Tab.tab2, state.index),
                     width: 24.0, height: 24.0),
                 label: 'Nutrición',
               ),
               BottomNavigationBarItem(
-                icon: Image.asset(_getAssetForTab(_Tab.TAB3, state.index),
+                icon: Image.asset(_getAssetForTab(_Tab.tab3, state.index),
                     width: 24.0, height: 24.0),
                 label: 'Sensei',
               ),
               BottomNavigationBarItem(
-                icon: Image.asset(_getAssetForTab(_Tab.TAB4, state.index),
+                icon: Image.asset(_getAssetForTab(_Tab.tab4, state.index),
                     width: 24.0, height: 24.0),
                 label: 'Social',
               ),
               BottomNavigationBarItem(
-                icon: Image.asset(_getAssetForTab(_Tab.TAB5, state.index),
+                icon: Image.asset(_getAssetForTab(_Tab.tab5, state.index),
                     width: 24.0, height: 24.0),
                 label: 'Perfil',
               ),
@@ -127,7 +167,8 @@ class HomePage extends StatelessWidget {
             currentIndex: state.index,
             selectedItemColor: Colors.white,
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.grey[800],
+            backgroundColor: Colors.grey[850],
+            unselectedItemColor: Colors.grey[400],
             onTap: (item) {
               context.read<HomeBloc>().add(HomeIndexChanged(item));
             },
@@ -136,4 +177,4 @@ class HomePage extends StatelessWidget {
   }
 }
 
-enum _Tab { TAB1, TAB2, TAB3, TAB4, TAB5 }
+enum _Tab { tab1, tab2, tab3, tab4, tab5 }

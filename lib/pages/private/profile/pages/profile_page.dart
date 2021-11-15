@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prueba/pages/private/profile/bloc/profile_bloc.dart';
+import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
 import 'package:prueba/src/bloc/authentication_bloc.dart';
 import 'package:prueba/src/bloc/user_bloc.dart';
 
@@ -22,89 +24,155 @@ class ProfilePage extends StatelessWidget {
       TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white);
 
   Widget home() {
-    return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
-      return Container(
-          color: Colors.grey[850],
-          child: Container(
-              margin: const EdgeInsets.only(top: 25.0),
-              child: Column(children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        "Perfil",
-                        style: optionStyle,
-                      )
-                    ]),
-                Container(
-                  margin: const EdgeInsets.only(top: 20.0),
+    return SingleChildScrollView(
+        child: Container(
+            margin: const EdgeInsets.only(top: 25.0),
+            child: Column(children: [
+              profileInfo(),
+              Container(
+                color: Colors.black,
+                margin: const EdgeInsets.only(top: 30),
+                child: Text(
+                  "NIVEL DE SOCIO",
+                  style: TextStyle(fontSize: 20, color: Colors.grey[500]),
                 ),
-                Image.network("https://bestcycling.com/" +
-                    state.user.attributes["avatar_url"]),
-                Container(
-                    margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                    child: Text(
-                      "Bestcycling S.L.",
-                      style: TextStyle(fontSize: 20, color: Colors.grey[500]),
-                    )),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Icon(Icons.location_pin, color: Colors.grey[500]),
-                  Text(
-                    "Alboraya, España",
-                    style: TextStyle(color: Colors.grey[500]),
-                  )
-                ]),
-                Container(
-                    margin: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: ElevatedButton(
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.only(right: 40.0, left: 40.0)),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                        color: Colors.orange, width: 1),
-                                    borderRadius: BorderRadius.circular(30.0))),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.transparent)),
-                        onPressed: () => {},
-                        child: const Text("Editar"))),
-                middleStatsItemRow(state)
-              ])));
+              )
+            ])));
+  }
+
+  Widget profileInfo() {
+    return Container(
+        color: Colors.grey[850],
+        child: Column(children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: const Text(
+                    "Perfil",
+                    style: optionStyle,
+                  ))
+            ],
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 20.0),
+          ),
+          BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+            return Image.network("https://bestcycling.com/" +
+                state.user.attributes["avatar_url"]);
+          }),
+          Container(
+              margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+              child: Text(
+                "Bestcycling S.L.",
+                style: TextStyle(fontSize: 20, color: Colors.grey[500]),
+              )),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Icon(Icons.location_pin, color: Colors.grey[500]),
+            Text(
+              "Alboraya, España",
+              style: TextStyle(color: Colors.grey[500]),
+            )
+          ]),
+          Container(
+              margin: const EdgeInsets.only(top: 20, bottom: 20),
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.only(right: 40.0, left: 40.0)),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          side:
+                              const BorderSide(color: Colors.orange, width: 1),
+                          borderRadius: BorderRadius.circular(30.0))),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.transparent)),
+                  onPressed: () => {},
+                  child: const Text("Editar"))),
+          middleStatsItemRow(),
+          bottomStatsRow()
+        ]));
+  }
+
+  Widget middleStatsItemRow() {
+    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
+      return Container(
+          decoration: const BoxDecoration(
+              border: Border(
+                  top: BorderSide(color: Colors.grey),
+                  bottom: BorderSide(color: Colors.grey))),
+          padding: const EdgeInsets.only(
+              top: 10.0, right: 30.0, left: 30.0, bottom: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              middleStatsItem(
+                  state.profile.attributes["level"].toString(), "NIVEL"),
+              middleStatsItem(
+                  state.profile.attributes["perseverance"].toString(),
+                  "CONSTANCIA"),
+              middleStatsItem(
+                  state.profile.attributes["points"].toString(), "PUNTOS")
+            ],
+          ));
     });
   }
 
-  Widget middleStatsItemRow(state) {
-    return Container(
-        decoration: const BoxDecoration(
-            border: Border(
-                top: BorderSide(color: Colors.grey),
-                bottom: BorderSide(color: Colors.grey))),
-        padding: const EdgeInsets.only(
-            top: 10.0, right: 30.0, left: 30.0, bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            MiddleStatsItem(
-                state.user.attributes["affiliation_data"]["level"].toString(),
-                "nivel"),
-            MiddleStatsItem(
-                state.user.attributes["affiliation_data"]["level"].toString(),
-                "nivel"),
-            MiddleStatsItem(
-                state.user.attributes["affiliation_data"]["level"].toString(),
-                "nivel")
-          ],
-        ));
-  }
-
-  Widget MiddleStatsItem(String level, String label) {
+  Widget middleStatsItem(String level, String label) {
     return Column(children: [
       Text(
         level,
         style: optionStyle,
       ),
       Text(label, style: const TextStyle(fontSize: 14, color: Colors.grey))
+    ]);
+  }
+
+  Widget bottomStatsRow() {
+    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
+      return Container(
+          decoration: const BoxDecoration(
+              border: Border(bottom: BorderSide(color: Colors.grey))),
+          padding: const EdgeInsets.only(
+              top: 10.0, right: 30.0, left: 30.0, bottom: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              bottomStatsItem(
+                  state.profile.attributes["resistance_points"].toString(),
+                  "Resistencia"),
+              bottomStatsItem(
+                  state.profile.attributes["force_points"].toString(),
+                  "Fuerza"),
+              bottomStatsItem(
+                  state.profile.attributes["flexibility_points"].toString(),
+                  "Flexibilidad"),
+              bottomStatsItem(
+                  state.profile.attributes["mind_points"].toString(), "Mente")
+            ],
+          ));
+    });
+  }
+
+  Widget bottomStatsItem(String level, String label) {
+    return Column(children: [
+      Container(
+        padding: const EdgeInsets.all(25),
+        child: Text(
+          level,
+          textScaleFactor: 2,
+          style:
+              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.grey[900],
+        ),
+      ),
+      Container(
+          padding: const EdgeInsets.only(top: 10),
+          child: Text(label,
+              style: const TextStyle(fontSize: 14, color: Colors.grey)))
     ]);
   }
 }

@@ -30,3 +30,14 @@ class LogIn extends AuthenticationEvent {
   @override
   List<Object> get props => [token];
 }
+
+class GetProfile extends AuthenticationEvent {
+  const GetProfile(
+    this.token,
+  );
+
+  final String token;
+
+  @override
+  List<Object> get props => [token];
+}
