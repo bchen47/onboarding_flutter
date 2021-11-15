@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:prueba/src/models/token.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -51,6 +52,22 @@ class AuthenticationRepository {
   void logOut() {
     _controller.add(AuthenticationStatusLogin(
         status: AuthenticationStatus.unauthenticated));
+  }
+
+  Future<void> checkAutenticated() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString("access_token") != null) {
+      _controller.add(AuthenticationStatusLogin(
+          status: AuthenticationStatus.authenticated,
+          token: Token(
+              prefs.getString("access_token").toString(),
+              prefs.getString("refresh_token").toString(),
+              prefs.getString("expires_in").toString(),
+              prefs.getString("token_type").toString())));
+    } else {
+      _controller.add(AuthenticationStatusLogin(
+          status: AuthenticationStatus.unauthenticated));
+    }
   }
 
   void dispose() => _controller.close();

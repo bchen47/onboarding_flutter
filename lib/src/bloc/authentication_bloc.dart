@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
 import 'package:prueba/pages/private/profile/models/profile.dart';
 import 'package:prueba/src/models/token.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'user_repository.dart';
 import 'authentication_repository.dart';
@@ -23,6 +24,8 @@ class AuthenticationBloc
         super(const AuthenticationState.unknown()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
+    on<AuthenticationCheckAuthenticated>(_checkAuthenticated);
+
     on<LogIn>(_tryGetUser);
     on<GetProfile>(_tryGetProfile);
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
@@ -52,6 +55,11 @@ class AuthenticationBloc
       case AuthenticationStatus.unauthenticated:
         return emit(const AuthenticationState.unauthenticated());
       case AuthenticationStatus.authenticated:
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("access_token", event.status.token.accessToken);
+        prefs.setString("refresh_token", event.status.token.refreshToken);
+        prefs.setString("expires_in", event.status.token.expiresIn);
+        prefs.setString("token_type", event.status.token.tokenType);
         return emit(AuthenticationState.authenticated(event.status.token));
       default:
         return emit(const AuthenticationState.unknown());
@@ -83,5 +91,12 @@ class AuthenticationBloc
     } catch (_) {
       return null;
     }
+  }
+
+  void _checkAuthenticated(
+    AuthenticationCheckAuthenticated event,
+    Emitter<AuthenticationState> emit,
+  ) {
+    _authenticationRepository.checkAutenticated();
   }
 }

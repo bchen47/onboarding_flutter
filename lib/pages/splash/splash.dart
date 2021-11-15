@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_sequence_animator/image_sequence_animator.dart';
 import 'package:prueba/pages/public/login/pages/welcome.dart';
+import 'package:prueba/src/bloc/authentication_bloc.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -40,6 +42,7 @@ class _SplashPageState extends State<SplashPage> {
   void _onFinishPlaying(ImageSequenceAnimatorState _imageSequenceAnimator) {
     //Navigator.pushNamed(context, "/welcome");
     _imageSequenceAnimator.stop();
+
     Navigator.of(context).pushAndRemoveUntil<void>(
       WelcomePage.route(),
       (route) => false,
@@ -62,7 +65,7 @@ class _SplashPageState extends State<SplashPage> {
                     "assets/splash", "logo-animado-sprites", 0, 2, "png", 37,
                     isAutoPlay: true,
                     onFinishPlaying: _onFinishPlaying,
-                    fps: 50)),
+                    fps: 25)),
           ),
         ],
       ),

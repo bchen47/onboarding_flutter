@@ -25,6 +25,7 @@ void main() => runApp(App(
       userRepository: UserRepository(),
       profileRepository: ProfileRepository(),
     ));
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class App extends StatelessWidget {
   const App({
@@ -75,7 +76,9 @@ class _AppViewState extends State<AppView> {
 
   @override
   Widget build(BuildContext context) {
+    // context.read<AuthenticationBloc>().add(AuthenticationCheckAuthenticated());
     return MaterialApp(
+      key: _scaffoldKey,
       theme: ThemeData(
           primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.black),
       navigatorKey: _navigatorKey,

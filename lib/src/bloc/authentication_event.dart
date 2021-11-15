@@ -41,3 +41,5 @@ class GetProfile extends AuthenticationEvent {
   @override
   List<Object> get props => [token];
 }
+
+class AuthenticationCheckAuthenticated extends AuthenticationEvent {}

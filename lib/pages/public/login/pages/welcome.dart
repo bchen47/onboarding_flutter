@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/pages/public/login/pages/login_page.dart';
 import 'package:prueba/pages/public/login/pages/register_options.dart';
 import 'package:prueba/pages/public/register/pages/register_page.dart';
 import 'package:prueba/pages/utils/style.dart';
+import 'package:prueba/src/bloc/authentication_bloc.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({
@@ -13,21 +15,27 @@ class WelcomePage extends StatelessWidget {
   }
 
   Widget _buildHomeRoute(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/login/img-fondo-sonrisa@3x.jpg"),
-            fit: BoxFit.cover,
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+      context
+          .read<AuthenticationBloc>()
+          .add(AuthenticationCheckAuthenticated());
+      return Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/login/img-fondo-sonrisa@3x.jpg"),
+              fit: BoxFit.cover,
+            ),
           ),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [textLogin(), rowButton(context)]),
         ),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [textLogin(), rowButton(context)]),
-      ),
-    );
+      );
+    });
   }
 
   @override

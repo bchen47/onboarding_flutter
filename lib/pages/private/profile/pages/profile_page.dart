@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_bloc.dart';
-import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
-import 'package:prueba/src/bloc/authentication_bloc.dart';
 import 'package:prueba/src/bloc/user_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -140,24 +138,29 @@ class ProfilePage extends StatelessWidget {
             children: [
               bottomStatsItem(
                   state.profile.attributes["resistance_points"].toString(),
-                  "Resistencia"),
+                  "Resistencia",
+                  Colors.yellow),
               bottomStatsItem(
                   state.profile.attributes["force_points"].toString(),
-                  "Fuerza"),
+                  "Fuerza",
+                  Colors.red),
               bottomStatsItem(
                   state.profile.attributes["flexibility_points"].toString(),
-                  "Flexibilidad"),
+                  "Flexibilidad",
+                  Colors.green),
               bottomStatsItem(
-                  state.profile.attributes["mind_points"].toString(), "Mente")
+                  state.profile.attributes["mind_points"].toString(),
+                  "Mente",
+                  Colors.blue)
             ],
           ));
     });
   }
 
-  Widget bottomStatsItem(String level, String label) {
+  Widget bottomStatsItem(String level, String label, Color? color) {
     return Column(children: [
       Container(
-        padding: const EdgeInsets.all(25),
+        padding: const EdgeInsets.all(20),
         child: Text(
           level,
           textScaleFactor: 2,
@@ -166,7 +169,7 @@ class ProfilePage extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.grey[900],
+          color: color,
         ),
       ),
       Container(
