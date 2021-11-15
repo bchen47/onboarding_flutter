@@ -47,6 +47,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UserLogoutRequested event,
     Emitter<UserState> emit,
   ) {
-    // _UserRepository.logOut();
+    _userRepository.logOut();
   }
 }

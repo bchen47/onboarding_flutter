@@ -60,6 +60,7 @@ class AuthenticationBloc
         prefs.setString("refresh_token", event.status.token.refreshToken);
         prefs.setString("expires_in", event.status.token.expiresIn);
         prefs.setString("token_type", event.status.token.tokenType);
+        _userRepository.getUser(event.status.token.accessToken);
         return emit(AuthenticationState.authenticated(event.status.token));
       default:
         return emit(const AuthenticationState.unknown());
@@ -70,6 +71,9 @@ class AuthenticationBloc
     AuthenticationLogoutRequested event,
     Emitter<AuthenticationState> emit,
   ) {
+    _userRepository.logOut();
+    SharedPreferences.getInstance()
+        .then((SharedPreferences value) => value.clear());
     _authenticationRepository.logOut();
   }
 

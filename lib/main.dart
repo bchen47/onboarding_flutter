@@ -14,6 +14,7 @@ import 'package:prueba/pages/private/home/pages/home_page.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_bloc.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
 import 'package:prueba/pages/public/login/pages/login_page.dart';
+import 'package:prueba/pages/public/login/pages/welcome.dart';
 import 'package:prueba/src/bloc/authentication_bloc.dart';
 import 'package:prueba/src/bloc/authentication_repository.dart';
 import 'package:prueba/src/bloc/user_bloc.dart';
@@ -42,24 +43,23 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: authenticationRepository,
-      child: BlocProvider(
-          create: (_) => AuthenticationBloc(
-              authenticationRepository: authenticationRepository,
-              userRepository: userRepository,
-              profileRepository: profileRepository),
-          child: RepositoryProvider.value(
-              value: userRepository,
-              child: BlocProvider(
+        value: authenticationRepository,
+        child: BlocProvider(
+            create: (_) => AuthenticationBloc(
+                authenticationRepository: authenticationRepository,
+                userRepository: userRepository,
+                profileRepository: profileRepository),
+            child: RepositoryProvider.value(
+                value: userRepository,
+                child: BlocProvider(
                   create: (_) => UserBloc(userRepository: userRepository),
-                  child: RepositoryProvider.value(
-                      value: profileRepository,
-                      child: BlocProvider(
-                        create: (_) =>
-                            ProfileBloc(profileRepository: profileRepository),
-                        child: const AppView(),
-                      ))))),
-    );
+                  //     child: RepositoryProvider.value(
+                  //         value: profileRepository,
+                  //         child: BlocProvider(
+                  //           create: (_) =>
+                  //               ProfileBloc(profileRepository: profileRepository),
+                  child: const AppView(),
+                ))));
   }
 }
 
@@ -94,7 +94,7 @@ class _AppViewState extends State<AppView> {
                 break;
               case AuthenticationStatus.unauthenticated:
                 _navigator.pushAndRemoveUntil<void>(
-                  LoginPage.route(),
+                  WelcomePage.route(),
                   (route) => false,
                 );
                 break;

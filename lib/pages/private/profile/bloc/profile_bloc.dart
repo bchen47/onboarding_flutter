@@ -12,6 +12,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       : _profileRepository = profileRepository,
         super(const ProfileState._()) {
     on<ProfileChanged>(_onLoadProfile);
+
     _profileLoadedSuscription = profileRepository.status.listen(
       (status) => {add(ProfileChanged(status.attributes))},
     );
@@ -19,10 +20,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   final ProfileRepository _profileRepository;
   late StreamSubscription<Profile> _profileLoadedSuscription;
+
   @override
   Future<void> close() {
-    _profileRepository.dispose();
     _profileLoadedSuscription.cancel();
+    _profileRepository.dispose();
     return super.close();
   }
 

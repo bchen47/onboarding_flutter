@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_sequence_animator/image_sequence_animator.dart';
 import 'package:prueba/pages/public/login/pages/welcome.dart';
-import 'package:prueba/src/bloc/authentication_bloc.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);

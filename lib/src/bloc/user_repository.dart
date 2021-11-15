@@ -16,6 +16,10 @@ class UserRepository {
     return _controller.stream;
   }
 
+  void logOut() {
+    //_controller.add(User(User.empty.attributes));
+  }
+
   Future<User?> getUser(String accessToken) async {
     if (_user != null) return _user;
     final uriDesign =

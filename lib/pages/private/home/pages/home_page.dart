@@ -41,65 +41,35 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-        providers: [
-          BlocProvider<HomeBloc>(
-            create: (BuildContext context) => HomeBloc(
-              authenticationRepository:
-                  RepositoryProvider.of<AuthenticationRepository>(context),
-              userRepository: RepositoryProvider.of<UserRepository>(context),
-            ),
-          ),
-          BlocProvider<ProfileBloc>(
-            create: (BuildContext context) => ProfileBloc(
-              profileRepository:
-                  RepositoryProvider.of<ProfileRepository>(context),
-            ),
-          ),
-        ],
-        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (context, state) {
-          BlocProvider.of<ProfileBloc>(context);
-          BlocProvider.of<UserBloc>(context);
+    return RepositoryProvider(
+        create: (context) => ProfileRepository(),
+        child: MultiBlocProvider(
+            providers: [
+              BlocProvider<HomeBloc>(
+                create: (BuildContext context) => HomeBloc(
+                  authenticationRepository:
+                      RepositoryProvider.of<AuthenticationRepository>(context),
+                  userRepository:
+                      RepositoryProvider.of<UserRepository>(context),
+                ),
+              ),
+              BlocProvider<ProfileBloc>(
+                create: (_) => ProfileBloc(
+                  profileRepository: context.read<ProfileRepository>(),
+                ),
+              ),
+            ],
+            child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+              BlocProvider.of<UserBloc>(context);
 
-          context
-              .read<AuthenticationBloc>()
-              .add(LogIn(state.token.accessToken));
-          context
-              .read<AuthenticationBloc>()
-              .add(GetProfile(state.token.accessToken));
-          return Scaffold(body: home());
-        })
+              context
+                  .read<AuthenticationBloc>()
+                  .add(GetProfile(state.token.accessToken));
+              return Scaffold(body: home());
+            })));
 
-        // return BlocProvider(
-        //   create: (context) {
-        //     return HomeBloc(
-        //       authenticationRepository:
-        //           RepositoryProvider.of<AuthenticationRepository>(context),
-        //       userRepository: RepositoryProvider.of<UserRepository>(context),
-        //     );
-        //   },
-        //   child: BlocProvider(
-        //       create: (_) => UserBloc(
-        //           userRepository: RepositoryProvider.of<UserRepository>(context)),
-        //       child: BlocProvider(create: (context) {
-        //         return ProfileBloc(
-
-        //           profileRepository:
-        //               RepositoryProvider.of<ProfileRepository>(context),
-        //         );
-        //       }, child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        //           builder: (context, state) {
-        //         context.read<UserBloc>();
-        //         context
-        //             .read<AuthenticationBloc>()
-        //             .add(LogIn(state.token.accessToken));
-        //         context
-        //             .read<AuthenticationBloc>()
-        //             .add(GetProfile(state.token.accessToken));
-        //         return Scaffold(body: home());
-        //       }))),
-        );
+    // );
   }
 
   /// Get the asset icon for the given tab
