@@ -10,6 +10,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prueba/pages/private/explore/list_class/bloc/training_class_bloc.dart';
+import 'package:prueba/pages/private/explore/list_class/bloc/training_class_repository.dart';
 import 'package:prueba/pages/private/home/pages/home_page.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_bloc.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
@@ -24,21 +26,23 @@ void main() => runApp(App(
       authenticationRepository: AuthenticationRepository(),
       userRepository: UserRepository(),
       profileRepository: ProfileRepository(),
+      trainingClassRepository: TrainingClassRepository(),
     ));
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class App extends StatelessWidget {
-  const App({
-    Key? key,
-    required this.authenticationRepository,
-    required this.userRepository,
-    required this.profileRepository,
-  }) : super(key: key);
+  const App(
+      {Key? key,
+      required this.authenticationRepository,
+      required this.userRepository,
+      required this.profileRepository,
+      required this.trainingClassRepository})
+      : super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
   final ProfileRepository profileRepository;
-
+  final TrainingClassRepository trainingClassRepository;
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
@@ -47,7 +51,8 @@ class App extends StatelessWidget {
             create: (_) => AuthenticationBloc(
                 authenticationRepository: authenticationRepository,
                 userRepository: userRepository,
-                profileRepository: profileRepository),
+                profileRepository: profileRepository,
+                trainingClassRepository: trainingClassRepository),
             child: RepositoryProvider.value(
                 value: userRepository,
                 child: BlocProvider(
@@ -55,10 +60,14 @@ class App extends StatelessWidget {
                     child: RepositoryProvider.value(
                         value: profileRepository,
                         child: BlocProvider(
-                          create: (_) =>
-                              ProfileBloc(profileRepository: profileRepository),
-                          child: const AppView(),
-                        ))))));
+                            create: (_) => ProfileBloc(
+                                profileRepository: profileRepository),
+                            child: BlocProvider(
+                              create: (_) => TrainingClassBloc(
+                                  trainingClassRepository:
+                                      trainingClassRepository),
+                              child: const AppView(),
+                            )))))));
   }
 }
 

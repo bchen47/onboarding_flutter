@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:prueba/pages/private/explore/list_class/models/training_class.dart';
+import 'package:prueba/pages/private/explore/list_class/pages/training_class_list_page.dart';
 
 class SliderImages {
   final Widget background;
   final Widget above;
-
-  SliderImages(this.background, this.above);
+  final String id;
+  SliderImages(this.background, this.above, this.id);
 }
 
 class ExplorePage extends StatelessWidget {
@@ -78,15 +80,24 @@ class ExplorePage extends StatelessWidget {
       items: items.map<Widget>((SliderImages i) {
         return Builder(
           builder: (BuildContext context) {
-            return Stack(children: <Widget>[
-              i.background,
-              Container(
-                  width: 280,
-                  height: 130,
-                  padding: const EdgeInsets.all(40),
-                  alignment: Alignment.center,
-                  child: i.above)
-            ]);
+            return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            TrainingClassListPage(category: i.id.toString()),
+                      ));
+                },
+                child: Stack(children: <Widget>[
+                  i.background,
+                  Container(
+                      width: 280,
+                      height: 130,
+                      padding: const EdgeInsets.all(40),
+                      alignment: Alignment.center,
+                      child: i.above)
+                ]));
           },
         );
       }).toList(),
@@ -102,7 +113,8 @@ class ExplorePage extends StatelessWidget {
           fit: BoxFit.cover,
         ),
         Image.asset("assets/slider/bestbalance-logo.png",
-            width: 280, height: 130)),
+            width: 280, height: 130),
+        "11"),
     SliderImages(
         Image.asset(
           "assets/slider/bestcycling.jpg",
@@ -111,40 +123,48 @@ class ExplorePage extends StatelessWidget {
           fit: BoxFit.cover,
         ),
         Image.asset("assets/slider/bestcycling-logo.png",
-            width: 280, height: 130)),
+            width: 280, height: 130),
+        "1"),
     SliderImages(
         Image.asset("assets/slider/bestmind.jpg",
             width: 280, height: 130, fit: BoxFit.cover),
         Image.asset("assets/slider/bestmind-logo.png",
-            width: 280, height: 130, fit: BoxFit.contain)),
+            width: 280, height: 130, fit: BoxFit.contain),
+        "21"),
     SliderImages(
         Image.asset("assets/slider/bestrunning.jpg",
             width: 280, height: 130, fit: BoxFit.cover),
         Image.asset("assets/slider/bestrunning-logo.png",
-            width: 280, height: 130)),
+            width: 280, height: 130),
+        "31"),
     SliderImages(
         Image.asset("assets/slider/besttraining.jpg",
             width: 280, height: 130, fit: BoxFit.cover),
         Image.asset("assets/slider/besttraining-logo.png",
-            width: 280, height: 130)),
+            width: 280, height: 130),
+        "41"),
     SliderImages(
         Image.asset("assets/slider/bestwalking.jpg",
             width: 280, height: 130, fit: BoxFit.cover),
         Image.asset("assets/slider/bestwalking-logo.png",
-            width: 280, height: 130))
+            width: 280, height: 130),
+        "2")
   ];
   final recipesImages = [
     SliderImages(
         Image.asset("assets/slider/breakfast.jpg",
             width: 280, height: 130, fit: BoxFit.cover),
-        const Text("Desayunos", style: optionStyleRecipes)),
+        const Text("Desayunos", style: optionStyleRecipes),
+        "breakfast"),
     SliderImages(
         Image.asset("assets/slider/lunchdinner.jpg",
             width: 280, height: 130, fit: BoxFit.cover),
-        const Text("Comidas", style: optionStyleRecipes)),
+        const Text("Comidas", style: optionStyleRecipes),
+        "lunch"),
     SliderImages(
         Image.asset("assets/slider/snack.jpg",
             width: 280, height: 130, fit: BoxFit.cover),
-        const Text("Snack", style: optionStyleRecipes)),
+        const Text("Snack", style: optionStyleRecipes),
+        "snack"),
   ];
 }

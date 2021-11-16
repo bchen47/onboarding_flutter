@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:prueba/pages/private/explore/list_class/bloc/training_class_repository.dart';
+import 'package:prueba/pages/private/explore/list_class/models/training_class.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
 import 'package:prueba/pages/private/profile/models/profile.dart';
 import 'package:prueba/src/models/token.dart';
@@ -18,9 +20,11 @@ class AuthenticationBloc
     required AuthenticationRepository authenticationRepository,
     required UserRepository userRepository,
     required ProfileRepository profileRepository,
+    required TrainingClassRepository trainingClassRepository,
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         _profileRepository = profileRepository,
+        _trainingClassRepository = trainingClassRepository,
         super(const AuthenticationState.unknown()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
@@ -28,6 +32,8 @@ class AuthenticationBloc
 
     on<LogIn>(_tryGetUser);
     on<GetProfile>(_tryGetProfile);
+    on<GetTrainingClasses>(_tryGetTrainingClasses);
+
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
       (status) => {add(AuthenticationStatusChanged(status))},
     );
@@ -36,6 +42,7 @@ class AuthenticationBloc
   final AuthenticationRepository _authenticationRepository;
   final UserRepository _userRepository;
   final ProfileRepository _profileRepository;
+  final TrainingClassRepository _trainingClassRepository;
 
   late StreamSubscription<AuthenticationStatusLogin>
       _authenticationStatusSubscription;
@@ -92,6 +99,17 @@ class AuthenticationBloc
     try {
       final profile = _profileRepository.getProfile(event.token);
       return profile;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<TrainingClass?> _tryGetTrainingClasses(
+      GetTrainingClasses event, Emitter<AuthenticationState> emit) async {
+    try {
+      final trainingClasses =
+          _trainingClassRepository.getClass(event.token, event.category);
+      return trainingClasses;
     } catch (_) {
       return null;
     }

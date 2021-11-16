@@ -42,4 +42,13 @@ class GetProfile extends AuthenticationEvent {
   List<Object> get props => [token];
 }
 
+class GetTrainingClasses extends AuthenticationEvent {
+  const GetTrainingClasses(this.token, this.category);
+
+  final String token;
+  final String category;
+  @override
+  List<Object> get props => [token, category];
+}
+
 class AuthenticationCheckAuthenticated extends AuthenticationEvent {}

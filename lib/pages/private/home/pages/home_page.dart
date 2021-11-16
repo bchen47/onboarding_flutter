@@ -61,6 +61,7 @@ class HomePage extends StatelessWidget {
           context
               .read<AuthenticationBloc>()
               .add(GetProfile(state.token.accessToken));
+
           return Scaffold(body: home());
         }));
 
