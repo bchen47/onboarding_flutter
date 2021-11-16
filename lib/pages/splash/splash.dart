@@ -63,7 +63,7 @@ class _SplashPageState extends State<SplashPage> {
                     "assets/splash", "logo-animado-sprites", 0, 2, "png", 37,
                     isAutoPlay: true,
                     onFinishPlaying: _onFinishPlaying,
-                    fps: 25)),
+                    fps: 30)),
           ),
         ],
       ),

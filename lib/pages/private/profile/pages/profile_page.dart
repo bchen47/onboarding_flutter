@@ -14,16 +14,17 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-      // BlocProvider.of<ProfileBloc>(context);
-      // BlocProvider.of<UserBloc>(context);
+//  BlocBuilder<AuthenticationBloc, AuthenticationState>(
+//             builder: (context, state) {
+//           BlocProvider.of<UserBloc>(context);
 
-      // context
-      //     .read<AuthenticationBloc>()
-      //     .add(GetProfile(state.token.accessToken));
-      return Scaffold(body: home());
-    });
+//           context
+//               .read<AuthenticationBloc>()
+//               .add(GetProfile(state.token.accessToken));
+//           return Scaffold(body: home());
+//         }
+
+    return Scaffold(body: home());
   }
 
   static const TextStyle optionStyle =

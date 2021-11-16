@@ -11,8 +11,9 @@ class UnAuthenticated implements Exception {
 
 class ProfileRepository {
   Profile? _profile;
-  final _controller = StreamController<Profile>();
+  var _controller = StreamController<Profile>();
   Stream<Profile> get status {
+    if (_controller.isClosed) _controller = StreamController<Profile>();
     return _controller.stream;
   }
 
@@ -39,6 +40,7 @@ class ProfileRepository {
 
   void dispose() {
     _controller.close();
+    _controller = StreamController<Profile>();
   }
 
   static Map<String, String> get headers {

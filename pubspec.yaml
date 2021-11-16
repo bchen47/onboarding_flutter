@@ -42,6 +42,7 @@ dependencies:
   json_api: ^5.0.5
   fluttertoast: ^8.0.8
   shared_preferences: ^2.0.8
+  carousel_slider: ^4.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -71,7 +72,7 @@ flutter:
       - assets/splash/
       - assets/login/
       - assets/navigation/
-
+      - assets/slider/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prueba/pages/private/explore/pages/explore.dart';
 import 'package:prueba/pages/private/home/bloc/home_bloc.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_bloc.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
@@ -19,11 +20,8 @@ class HomePage extends StatelessWidget {
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
+  static final List<Widget> _widgetOptions = <Widget>[
+    ExplorePage(),
     Text(
       'Index 1: Business',
       style: optionStyle,
