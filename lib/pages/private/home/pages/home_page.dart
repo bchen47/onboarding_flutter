@@ -41,33 +41,30 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-        create: (context) => ProfileRepository(),
-        child: MultiBlocProvider(
-            providers: [
-              BlocProvider<HomeBloc>(
-                create: (BuildContext context) => HomeBloc(
-                  authenticationRepository:
-                      RepositoryProvider.of<AuthenticationRepository>(context),
-                  userRepository:
-                      RepositoryProvider.of<UserRepository>(context),
-                ),
-              ),
-              BlocProvider<ProfileBloc>(
-                create: (_) => ProfileBloc(
-                  profileRepository: context.read<ProfileRepository>(),
-                ),
-              ),
-            ],
-            child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, state) {
-              BlocProvider.of<UserBloc>(context);
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<HomeBloc>(
+            create: (BuildContext context) => HomeBloc(
+              authenticationRepository:
+                  RepositoryProvider.of<AuthenticationRepository>(context),
+              userRepository: RepositoryProvider.of<UserRepository>(context),
+            ),
+          ),
+          BlocProvider<ProfileBloc>(
+            create: (_) => ProfileBloc(
+              profileRepository: context.read<ProfileRepository>(),
+            ),
+          ),
+        ],
+        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+          BlocProvider.of<UserBloc>(context);
 
-              context
-                  .read<AuthenticationBloc>()
-                  .add(GetProfile(state.token.accessToken));
-              return Scaffold(body: home());
-            })));
+          context
+              .read<AuthenticationBloc>()
+              .add(GetProfile(state.token.accessToken));
+          return Scaffold(body: home());
+        }));
 
     // );
   }

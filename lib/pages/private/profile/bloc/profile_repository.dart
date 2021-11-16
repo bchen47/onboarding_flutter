@@ -18,6 +18,7 @@ class ProfileRepository {
 
   Future<Profile?> getProfile(String accessToken) async {
     if (_profile != null) return _profile;
+    if (accessToken == "-") return null;
     final uriDesign =
         StandardUriDesign(Uri.parse("https://apiv2.bestcycling.es/api/v2/"));
     final client = RoutingClient(uriDesign);

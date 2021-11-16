@@ -52,14 +52,14 @@ class App extends StatelessWidget {
             child: RepositoryProvider.value(
                 value: userRepository,
                 child: BlocProvider(
-                  create: (_) => UserBloc(userRepository: userRepository),
-                  //     child: RepositoryProvider.value(
-                  //         value: profileRepository,
-                  //         child: BlocProvider(
-                  //           create: (_) =>
-                  //               ProfileBloc(profileRepository: profileRepository),
-                  child: const AppView(),
-                ))));
+                    create: (_) => UserBloc(userRepository: userRepository),
+                    child: RepositoryProvider.value(
+                        value: profileRepository,
+                        child: BlocProvider(
+                          create: (_) =>
+                              ProfileBloc(profileRepository: profileRepository),
+                          child: const AppView(),
+                        ))))));
   }
 }
 

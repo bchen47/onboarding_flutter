@@ -24,7 +24,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   @override
   Future<void> close() {
     _profileLoadedSuscription.cancel();
-    _profileRepository.dispose();
+    //_profileRepository.dispose();
     return super.close();
   }
 

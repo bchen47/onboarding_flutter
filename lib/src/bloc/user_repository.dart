@@ -17,7 +17,7 @@ class UserRepository {
   }
 
   void logOut() {
-    //_controller.add(User(User.empty.attributes));
+    _controller.add(User(User.empty.attributes));
   }
 
   Future<User?> getUser(String accessToken) async {
