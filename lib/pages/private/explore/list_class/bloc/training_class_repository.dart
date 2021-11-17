@@ -22,18 +22,38 @@ class TrainingClassRepository {
     if (accessToken == "-") return null;
     final uriDesign =
         StandardUriDesign(Uri.parse("https://apiv2.bestcycling.es/api/v2/"));
+
     final client = RoutingClient(uriDesign);
-    ResourceFetched response =
-        await client.fetchResource('training_classes', '', headers: {
+    final response = await client.fetchCollection('training_classes', headers: {
       HttpHeaders.userAgentHeader: "Flutter migration app",
       HttpHeaders.authorizationHeader: 'Bearer ' + accessToken,
       HttpHeaders.contentTypeHeader: 'application/vnd.api+json',
       'X-APP-ID': '1d665fac3ced84d799e615f5d5a2c1af'
     }, filter: {
       "category_nr": category
-    });
+    }, include: [
+      "trainer"
+    ]);
+
     if (!response.http.isFailed && response.http.hasDocument) {
-      _controller.add(TrainingClass(response.resource.attributes));
+      final resources = response.collection;
+
+      List<Map<String, dynamic>> clases = [];
+      Map<String, dynamic> trainers = {};
+
+      // resources.map((resource) {
+      //   clases.add(resource.attributes);
+      // });
+      resources.toList().forEach((element) {
+        clases.add(element.attributes);
+      });
+      response.included.toList().forEach((element) {
+        trainers
+            .addAll({element.id: element.attributes["full_name"].toString()});
+      });
+      //List<Map<String, dynamic>> resourc = resources.toList();
+
+      _controller.add(TrainingClass(clases, trainers));
       //response.resource.attributes
     } else {
       throw UnAuthenticated("No ha podido cargar las clases");

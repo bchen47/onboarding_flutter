@@ -14,11 +14,11 @@ class TrainingClass extends Equatable {
   //     this.updatedAtTimestamp,
   //     this.createdAt,
   //     this.userTrialPeriod);
-  final Map<String, dynamic> attributes;
-
-  const TrainingClass(this.attributes);
+  final List<Map<String, dynamic>> attributes;
+  final Map<String, dynamic> trainers;
+  const TrainingClass(this.attributes, this.trainers);
   @override
-  List<Object?> get props => [attributes];
+  List<Object?> get props => [attributes, trainers];
 
-  static const empty = TrainingClass({});
+  static const empty = TrainingClass([], {});
 }

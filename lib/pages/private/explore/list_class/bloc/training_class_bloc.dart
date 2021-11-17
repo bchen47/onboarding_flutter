@@ -14,7 +14,8 @@ class TrainingClassBloc extends Bloc<TrainingClassEvent, TrainingClassState> {
     on<TrainingClassChanged>(_onLoadTrainingClass);
 
     _trainingClassLoadedSuscription = trainingClassRepository.status.listen(
-      (status) => {add(TrainingClassChanged(status.attributes))},
+      (status) =>
+          {add(TrainingClassChanged(status.attributes, status.trainers))},
     );
   }
 
@@ -32,6 +33,7 @@ class TrainingClassBloc extends Bloc<TrainingClassEvent, TrainingClassState> {
     TrainingClassChanged event,
     Emitter<TrainingClassState> emit,
   ) async {
-    emit(state.copyWith(trainingClass: TrainingClass(event.attributes)));
+    emit(state.copyWith(
+        trainingClass: TrainingClass(event.attributes, event.trainers)));
   }
 }
