@@ -6,7 +6,6 @@ import 'package:prueba/pages/private/profile/bloc/profile_bloc.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
 import 'package:prueba/pages/private/profile/pages/profile_page.dart';
 import 'package:prueba/src/bloc/authentication_bloc.dart';
-import 'package:prueba/src/bloc/authentication_repository.dart';
 import 'package:prueba/src/bloc/user_bloc.dart';
 import 'package:prueba/src/bloc/user_repository.dart';
 
@@ -34,7 +33,7 @@ class HomePage extends StatelessWidget {
       'Index 3: School',
       style: optionStyle,
     ),
-    ProfilePage(),
+    const ProfilePage(),
   ];
 
   @override
@@ -43,8 +42,6 @@ class HomePage extends StatelessWidget {
         providers: [
           BlocProvider<HomeBloc>(
             create: (BuildContext context) => HomeBloc(
-              authenticationRepository:
-                  RepositoryProvider.of<AuthenticationRepository>(context),
               userRepository: RepositoryProvider.of<UserRepository>(context),
             ),
           ),

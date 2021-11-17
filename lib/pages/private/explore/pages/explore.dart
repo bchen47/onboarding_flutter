@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:prueba/pages/private/explore/list_class/models/training_class.dart';
 import 'package:prueba/pages/private/explore/list_class/pages/training_class_list_page.dart';
+import 'package:prueba/pages/private/explore/recipes_class/pages/recipes_list_page.dart';
 
 class SliderImages {
   final Widget background;
@@ -42,12 +42,12 @@ class ExplorePage extends StatelessWidget {
                       alignment: Alignment.center,
                       margin: const EdgeInsets.only(bottom: 10),
                       child: const Text("Explorar", style: optionStyle))),
-              sliderRow(trainingImages, "BUSCAR ENTRENAMIENTOS", context),
-              sliderRow(recipesImages, "RECETAS", context),
+              sliderRow(trainingImages, "BUSCAR ENTRENAMIENTOS", context, true),
+              sliderRow(recipesImages, "RECETAS", context, false),
             ]));
   }
 
-  Widget sliderRow(items, String title, context) {
+  Widget sliderRow(items, String title, context, isTraining) {
     return Container(
         // width: Medi aQuery.of(context).size.width,
         decoration: const BoxDecoration(
@@ -66,12 +66,12 @@ class ExplorePage extends StatelessWidget {
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.white))),
-                slider(items)
+                slider(items, isTraining)
               ],
             )));
   }
 
-  Widget slider(items) {
+  Widget slider(items, isTraining) {
     return CarouselSlider(
       options: CarouselOptions(
         height: 150,
@@ -85,8 +85,11 @@ class ExplorePage extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            TrainingClassListPage(category: i.id.toString()),
+                        builder: (context) => isTraining
+                            ? TrainingClassListPage(category: i.id.toString())
+                            : RecipesListPage(
+                                category: i.id.toString(),
+                                title: (i.above as Text).data.toString()),
                       ));
                 },
                 child: Stack(children: <Widget>[

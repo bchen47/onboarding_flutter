@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/pages/private/explore/list_class/bloc/training_class_bloc.dart';
 import 'package:prueba/pages/private/explore/list_class/bloc/training_class_repository.dart';
+import 'package:prueba/pages/private/explore/recipes_class/bloc/recipes_bloc.dart';
+import 'package:prueba/pages/private/explore/recipes_class/bloc/recipes_repository.dart';
 import 'package:prueba/pages/private/home/pages/home_page.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_bloc.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
@@ -27,6 +29,7 @@ void main() => runApp(App(
       userRepository: UserRepository(),
       profileRepository: ProfileRepository(),
       trainingClassRepository: TrainingClassRepository(),
+      recipesRepository: RecipesRepository(),
     ));
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -36,13 +39,16 @@ class App extends StatelessWidget {
       required this.authenticationRepository,
       required this.userRepository,
       required this.profileRepository,
-      required this.trainingClassRepository})
+      required this.trainingClassRepository,
+      required this.recipesRepository})
       : super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
   final ProfileRepository profileRepository;
   final TrainingClassRepository trainingClassRepository;
+  final RecipesRepository recipesRepository;
+
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
@@ -52,7 +58,8 @@ class App extends StatelessWidget {
                 authenticationRepository: authenticationRepository,
                 userRepository: userRepository,
                 profileRepository: profileRepository,
-                trainingClassRepository: trainingClassRepository),
+                trainingClassRepository: trainingClassRepository,
+                recipesRepository: recipesRepository),
             child: RepositoryProvider.value(
                 value: userRepository,
                 child: BlocProvider(
@@ -63,11 +70,14 @@ class App extends StatelessWidget {
                             create: (_) => ProfileBloc(
                                 profileRepository: profileRepository),
                             child: BlocProvider(
-                              create: (_) => TrainingClassBloc(
-                                  trainingClassRepository:
-                                      trainingClassRepository),
-                              child: const AppView(),
-                            )))))));
+                                create: (_) => TrainingClassBloc(
+                                    trainingClassRepository:
+                                        trainingClassRepository),
+                                child: BlocProvider(
+                                  create: (_) => RecipesBloc(
+                                      recipesRepository: recipesRepository),
+                                  child: const AppView(),
+                                ))))))));
   }
 }
 

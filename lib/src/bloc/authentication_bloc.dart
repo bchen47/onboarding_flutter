@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:prueba/pages/private/explore/list_class/bloc/training_class_repository.dart';
 import 'package:prueba/pages/private/explore/list_class/models/training_class.dart';
+import 'package:prueba/pages/private/explore/recipes_class/bloc/recipes_repository.dart';
+import 'package:prueba/pages/private/explore/recipes_class/models/recipes.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
 import 'package:prueba/pages/private/profile/models/profile.dart';
 import 'package:prueba/src/models/token.dart';
@@ -21,10 +23,12 @@ class AuthenticationBloc
     required UserRepository userRepository,
     required ProfileRepository profileRepository,
     required TrainingClassRepository trainingClassRepository,
+    required RecipesRepository recipesRepository,
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         _profileRepository = profileRepository,
         _trainingClassRepository = trainingClassRepository,
+        _recipesRepository = recipesRepository,
         super(const AuthenticationState.unknown()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
@@ -33,6 +37,7 @@ class AuthenticationBloc
     on<LogIn>(_tryGetUser);
     on<GetProfile>(_tryGetProfile);
     on<GetTrainingClasses>(_tryGetTrainingClasses);
+    on<GetRecipes>(_tryGetRecipes);
 
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
       (status) => {add(AuthenticationStatusChanged(status))},
@@ -43,6 +48,7 @@ class AuthenticationBloc
   final UserRepository _userRepository;
   final ProfileRepository _profileRepository;
   final TrainingClassRepository _trainingClassRepository;
+  final RecipesRepository _recipesRepository;
 
   late StreamSubscription<AuthenticationStatusLogin>
       _authenticationStatusSubscription;
@@ -110,6 +116,17 @@ class AuthenticationBloc
       final trainingClasses =
           _trainingClassRepository.getClass(event.token, event.category);
       return trainingClasses;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<Recipes?> _tryGetRecipes(
+      GetRecipes event, Emitter<AuthenticationState> emit) async {
+    try {
+      final recipes =
+          _recipesRepository.getRecipes(event.token, event.category);
+      return recipes;
     } catch (_) {
       return null;
     }
