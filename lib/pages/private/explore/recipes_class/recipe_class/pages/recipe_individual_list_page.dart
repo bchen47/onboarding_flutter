@@ -89,21 +89,23 @@ class RecipeIndividualPage extends StatelessWidget {
   Widget buttons() {
     return Container(
         alignment: Alignment.bottomCenter,
-        child: Column(children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.transparent,
-              minimumSize: const Size.fromHeight(
-                  40), // fromHeight use double.infinity as width and 40 is the height
+        child: Center(
+          child: Column(children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent,
+                minimumSize: const Size.fromHeight(
+                    40), // fromHeight use double.infinity as width and 40 is the height
+              ),
+              onPressed: () {},
+              child: const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Text('INGREDIENTES',
+                    style: TextStyle(fontSize: 14, color: Colors.grey)),
+              ),
             ),
-            onPressed: () {},
-            child: const Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Text('INGREDIENTES',
-                  style: TextStyle(fontSize: 14, color: Colors.grey)),
-            ),
-          ),
-        ]));
+          ]),
+        ));
   }
 
   Widget statsRow(nutrients) {
@@ -131,7 +133,7 @@ class RecipeIndividualPage extends StatelessWidget {
     return Column(children: [
       Text(label, style: const TextStyle(fontSize: 14, color: Colors.grey)),
       Container(
-        margin: EdgeInsets.all(5),
+        margin: const EdgeInsets.all(5),
       ),
       Text(value + " g",
           style: const TextStyle(
@@ -142,6 +144,7 @@ class RecipeIndividualPage extends StatelessWidget {
   Widget middleSide() {
     return Container(
       alignment: Alignment.center,
+      padding: const EdgeInsets.only(left: 90),
       decoration: BoxDecoration(
           border: Border(
               bottom: BorderSide(
