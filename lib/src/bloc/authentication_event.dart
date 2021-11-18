@@ -70,3 +70,12 @@ class GetRecipes extends AuthenticationEvent {
   @override
   List<Object> get props => [token, category];
 }
+
+class GetRecipe extends AuthenticationEvent {
+  const GetRecipe(this.token, this.id);
+
+  final String token;
+  final String id;
+  @override
+  List<Object> get props => [token, id];
+}

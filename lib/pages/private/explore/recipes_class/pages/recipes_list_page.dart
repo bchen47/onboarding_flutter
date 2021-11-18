@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/pages/private/explore/recipes_class/bloc/recipes_bloc.dart';
+import 'package:prueba/pages/private/explore/recipes_class/recipe_class/bloc/recipe_bloc.dart';
+import 'package:prueba/pages/private/explore/recipes_class/recipe_class/bloc/recipe_repository.dart';
+import 'package:prueba/pages/private/explore/recipes_class/recipe_class/pages/recipe_individual_list_page.dart';
 import 'package:prueba/pages/utils/style.dart';
 import 'package:prueba/src/bloc/authentication_bloc.dart';
 
@@ -19,19 +22,22 @@ class RecipesListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     BlocProvider.of<RecipesBloc>(context);
 
-    return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(12),
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) {
-        context.read<RecipesBloc>().add(const RecipesChanged([]));
+    return BlocProvider(
+        create: (BuildContext context) =>
+            RecipeBloc(recipeRepository: RecipeRepository()),
+        child: Scaffold(
+            body: Padding(
+          padding: const EdgeInsets.all(12),
+          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, state) {
+            context.read<RecipesBloc>().add(const RecipesChanged([]));
 
-        context
-            .read<AuthenticationBloc>()
-            .add(GetRecipes(state.token.accessToken, category));
-        return Scaffold(appBar: Customs.appBar(title), body: home(context));
-      }),
-    ));
+            context
+                .read<AuthenticationBloc>()
+                .add(GetRecipes(state.token.accessToken, category));
+            return Scaffold(appBar: Customs.appBar(title), body: home(context));
+          }),
+        )));
   }
 
   Widget home(context) {
@@ -62,9 +68,19 @@ class RecipesListPage extends StatelessWidget {
   }
 
   Widget card(context, Map<String, dynamic> recipes) {
-    return Column(
-      children: [topSideCard(recipes), bottomSide(recipes)],
-    );
+    return Column(children: [
+      GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecipeIndividualPage(id: recipes["id"]),
+                ));
+          },
+          child: Column(
+            children: [topSideCard(recipes), bottomSide(recipes)],
+          ))
+    ]);
   }
 
   Widget bottomSide(

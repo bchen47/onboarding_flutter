@@ -5,6 +5,8 @@ import 'package:prueba/pages/private/explore/list_class/training_class/bloc/clas
 import 'package:prueba/pages/private/explore/list_class/training_class/models/class.dart';
 import 'package:prueba/pages/private/explore/recipes_class/bloc/recipes_repository.dart';
 import 'package:prueba/pages/private/explore/recipes_class/models/recipes.dart';
+import 'package:prueba/pages/private/explore/recipes_class/recipe_class/bloc/recipe_repository.dart';
+import 'package:prueba/pages/private/explore/recipes_class/recipe_class/models/recipe.dart';
 import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
 import 'package:prueba/pages/private/profile/models/profile.dart';
 import 'package:prueba/src/models/token.dart';
@@ -27,12 +29,14 @@ class AuthenticationBloc
     required TrainingClassRepository trainingClassRepository,
     required RecipesRepository recipesRepository,
     required ClassRepository classRepository,
+    required RecipeRepository recipeRepository,
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         _profileRepository = profileRepository,
         _trainingClassRepository = trainingClassRepository,
         _recipesRepository = recipesRepository,
         _classRepository = classRepository,
+        _recipeRepository = recipeRepository,
         super(const AuthenticationState.unknown()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
@@ -43,6 +47,7 @@ class AuthenticationBloc
     on<GetTrainingClasses>(_tryGetTrainingClasses);
     on<GetRecipes>(_tryGetRecipes);
     on<GetTrainingClass>(_tryGetTrainingClass);
+    on<GetRecipe>(_tryGetRecipe);
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
       (status) => {add(AuthenticationStatusChanged(status))},
     );
@@ -54,6 +59,7 @@ class AuthenticationBloc
   final TrainingClassRepository _trainingClassRepository;
   final RecipesRepository _recipesRepository;
   final ClassRepository _classRepository;
+  final RecipeRepository _recipeRepository;
 
   late StreamSubscription<AuthenticationStatusLogin>
       _authenticationStatusSubscription;
@@ -132,6 +138,16 @@ class AuthenticationBloc
       final recipes =
           _recipesRepository.getRecipes(event.token, event.category);
       return recipes;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<Recipe?> _tryGetRecipe(
+      GetRecipe event, Emitter<AuthenticationState> emit) async {
+    try {
+      final recipe = _recipeRepository.getRecipe(event.token, event.id);
+      return recipe;
     } catch (_) {
       return null;
     }
