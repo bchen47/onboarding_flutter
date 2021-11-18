@@ -51,6 +51,15 @@ class GetTrainingClasses extends AuthenticationEvent {
   List<Object> get props => [token, category];
 }
 
+class GetTrainingClass extends AuthenticationEvent {
+  const GetTrainingClass(this.token, this.id);
+
+  final String token;
+  final String id;
+  @override
+  List<Object> get props => [token, id];
+}
+
 class AuthenticationCheckAuthenticated extends AuthenticationEvent {}
 
 class GetRecipes extends AuthenticationEvent {

@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/pages/private/explore/list_class/bloc/training_class_bloc.dart';
+import 'package:prueba/pages/private/explore/list_class/training_class/bloc/class_bloc.dart';
+import 'package:prueba/pages/private/explore/list_class/training_class/bloc/class_repository.dart';
+import 'package:prueba/pages/private/explore/list_class/training_class/pages/training_individual_class_list_page.dart';
 import 'package:prueba/pages/utils/style.dart';
 import 'package:prueba/src/bloc/authentication_bloc.dart';
 import 'package:intl/intl.dart';
@@ -16,24 +19,26 @@ class TrainingClassListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<TrainingClassBloc>(context);
+    return BlocProvider(
+        create: (BuildContext context) =>
+            ClassBloc(classRepository: ClassRepository()),
+        child: Scaffold(
+            body: Padding(
+          padding: const EdgeInsets.all(12),
+          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, state) {
+            context
+                .read<TrainingClassBloc>()
+                .add(const TrainingClassChanged([], {}));
 
-    return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(12),
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) {
-        context
-            .read<TrainingClassBloc>()
-            .add(const TrainingClassChanged([], {}));
-
-        context
-            .read<AuthenticationBloc>()
-            .add(GetTrainingClasses(state.token.accessToken, category));
-        return Scaffold(
-            appBar: Customs.appBar("Elige un entrenamiento"),
-            body: home(context));
-      }),
-    ));
+            context
+                .read<AuthenticationBloc>()
+                .add(GetTrainingClasses(state.token.accessToken, category));
+            return Scaffold(
+                appBar: Customs.appBar("Elige un entrenamiento"),
+                body: home(context));
+          }),
+        )));
   }
 
   Widget home(context) {
@@ -69,7 +74,16 @@ class TrainingClassListPage extends StatelessWidget {
       Map<String, dynamic> trainers) {
     return Column(
       children: [
-        topSideCard(trainingClass, trainers),
+        GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        TrainingIndividualClassPage(id: trainingClass["id"]),
+                  ));
+            },
+            child: topSideCard(trainingClass, trainers)),
         bottomSide(trainingClass)
       ],
     );
@@ -143,8 +157,11 @@ class TrainingClassListPage extends StatelessWidget {
                             color: Colors.white))),
                 Container(
                     alignment: Alignment.topLeft,
-                    child: Text(trainers[trainingClass["trainer_id"].toString()]
-                        .toString()))
+                    child: Text(
+                      trainers[trainingClass["trainer_id"].toString()]
+                          .toString(),
+                      style: const TextStyle(color: Colors.white70),
+                    ))
               ])),
         ),
         Positioned(

@@ -17,7 +17,7 @@ class ClassRepository {
     return _controller.stream;
   }
 
-  Future<Class?> getClass(String accessToken, String id) async {
+  Future<Class?> getTrainingClass(String accessToken, String id) async {
     if (_class != null) return _class;
     if (accessToken == "-") return null;
     final uriDesign =

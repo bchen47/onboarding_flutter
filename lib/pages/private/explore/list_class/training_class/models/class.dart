@@ -14,11 +14,11 @@ class Class extends Equatable {
   //     this.updatedAtTimestamp,
   //     this.createdAt,
   //     this.userTrialPeriod);
-  final List<Map<String, dynamic>> attributes;
+  final Map<String, dynamic> attributes;
   final Map<String, dynamic> trainers;
   const Class(this.attributes, this.trainers);
   @override
   List<Object?> get props => [attributes, trainers];
 
-  static const empty = Class([], {});
+  static const empty = Class({}, {});
 }

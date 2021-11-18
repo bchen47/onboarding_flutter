@@ -21,15 +21,15 @@ class HomePage extends StatelessWidget {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   static final List<Widget> _widgetOptions = <Widget>[
     ExplorePage(),
-    Text(
+    const Text(
       'Index 1: Business',
       style: optionStyle,
     ),
-    Text(
+    const Text(
       'Index 2: School',
       style: optionStyle,
     ),
-    Text(
+    const Text(
       'Index 3: School',
       style: optionStyle,
     ),

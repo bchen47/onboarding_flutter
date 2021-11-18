@@ -45,7 +45,9 @@ class TrainingClassRepository {
       //   clases.add(resource.attributes);
       // });
       resources.toList().forEach((element) {
-        clases.add(element.attributes);
+        var trainingClass = element.attributes;
+        trainingClass.addAll({"id": element.id});
+        clases.add(trainingClass);
       });
       response.included.toList().forEach((element) {
         trainers
