@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/pages/private/explore/list_class/training_class/bloc/class_bloc.dart';
+import 'package:prueba/pages/private/explore/list_class/training_class/pages/video_player/web_view_player.dart';
 import 'package:prueba/src/bloc/authentication_bloc.dart';
 import 'package:intl/intl.dart';
 
@@ -76,7 +77,7 @@ class TrainingIndividualClassPage extends StatelessWidget {
         bottomSide(trainingClass),
         description(trainingClass),
         const Spacer(),
-        buttons()
+        buttons(context, trainingClass)
       ],
     );
   }
@@ -94,7 +95,7 @@ class TrainingIndividualClassPage extends StatelessWidget {
         ));
   }
 
-  Widget buttons() {
+  Widget buttons(context, trainingClass) {
     return Container(
         alignment: Alignment.bottomCenter,
         child: Column(children: [
@@ -117,7 +118,20 @@ class TrainingIndividualClassPage extends StatelessWidget {
               minimumSize: const Size.fromHeight(
                   40), // fromHeight use double.infinity as width and 40 is the height
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WebViewPlayer(
+                        token: context
+                            .read<AuthenticationBloc>()
+                            .state
+                            .token
+                            .accessToken
+                            .toString(),
+                        data: trainingClass),
+                  ));
+            },
             child: const Padding(
               padding: EdgeInsets.all(20.0),
               child: Text('REPRODUCIR'),

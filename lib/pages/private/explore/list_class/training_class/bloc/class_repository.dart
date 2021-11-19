@@ -38,7 +38,6 @@ class ClassRepository {
       final resources = response.resource.attributes;
 
       Map<String, dynamic> trainers = {};
-
       response.included.toList().forEach((element) {
         trainers
             .addAll({element.id: element.attributes["full_name"].toString()});
