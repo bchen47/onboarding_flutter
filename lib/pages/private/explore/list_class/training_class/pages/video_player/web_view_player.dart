@@ -55,6 +55,8 @@ class _WebViewPlayerState extends State<WebViewPlayer>
     final Map<String, dynamic> trainingData = data;
     trainingData['url'] =
         "${trainingData["media"][0]["url"]}&access_token=$accessToken";
+    //"${trainingData["url"]}&access_token=$accessToken";
+
     if (trainingData['progression'].length == 0) {
       trainingData['progression'] = null;
     }
