@@ -10,23 +10,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prueba/pages/private/explore/list_class/bloc/training_class_bloc.dart';
-import 'package:prueba/pages/private/explore/list_class/bloc/training_class_repository.dart';
-import 'package:prueba/pages/private/explore/list_class/training_class/bloc/class_bloc.dart';
-import 'package:prueba/pages/private/explore/list_class/training_class/bloc/class_repository.dart';
-import 'package:prueba/pages/private/explore/recipes_class/bloc/recipes_bloc.dart';
-import 'package:prueba/pages/private/explore/recipes_class/bloc/recipes_repository.dart';
-import 'package:prueba/pages/private/explore/recipes_class/recipe_class/bloc/recipe_bloc.dart';
-import 'package:prueba/pages/private/explore/recipes_class/recipe_class/bloc/recipe_repository.dart';
-import 'package:prueba/pages/private/home/pages/home_page.dart';
-import 'package:prueba/pages/private/profile/bloc/profile_bloc.dart';
-import 'package:prueba/pages/private/profile/bloc/profile_repository.dart';
-import 'package:prueba/pages/public/login/pages/welcome.dart';
-import 'package:prueba/src/bloc/authentication_bloc.dart';
-import 'package:prueba/src/bloc/authentication_repository.dart';
-import 'package:prueba/src/bloc/user_bloc.dart';
-import 'package:prueba/src/bloc/user_repository.dart';
-import 'pages/splash/splash.dart';
+import 'package:prueba/blocs/authentication/authentication_bloc.dart';
+import 'package:prueba/blocs/profile/profile_bloc.dart';
+import 'package:prueba/blocs/training_list_class/training_class_bloc.dart';
+import 'package:prueba/blocs/user/user_bloc.dart';
+import 'package:prueba/providers/authentication_repository.dart';
+import 'package:prueba/providers/training_class_list_repository.dart';
+import 'package:prueba/blocs/training_class/training_class_bloc.dart';
+import 'package:prueba/providers/training_class_repository.dart';
+import 'package:prueba/providers/recipes_repository.dart';
+import 'package:prueba/providers/recipe_repository.dart';
+import 'package:prueba/screens/home_page.dart';
+import 'package:prueba/providers/profile_repository.dart';
+import 'package:prueba/screens/access/welcome.dart';
+import 'package:prueba/providers/user_repository.dart';
+import 'screens/access/splash.dart';
 
 void main() => runApp(App(
       authenticationRepository: AuthenticationRepository(),
@@ -85,17 +83,10 @@ class App extends StatelessWidget {
                                     trainingClassRepository:
                                         trainingClassRepository),
                                 child: BlocProvider(
-                                    create: (_) => RecipesBloc(
-                                        recipesRepository: recipesRepository),
-                                    child: BlocProvider(
-                                        create: (_) => ClassBloc(
-                                            classRepository: classRepository),
-                                        child: BlocProvider(
-                                          create: (_) => RecipeBloc(
-                                              recipeRepository:
-                                                  recipeRepository),
-                                          child: const AppView(),
-                                        ))))))))));
+                                  create: (_) => ClassBloc(
+                                      classRepository: classRepository),
+                                  child: const AppView(),
+                                ))))))));
   }
 }
 
@@ -145,43 +136,3 @@ class _AppViewState extends State<AppView> {
     );
   }
 }
-/*void main() => runApp(MyApp(
-    authenticationRepository: AuthenticationRepository(),
-    userRepository: UserRepository()));
-
-class MyApp extends StatelessWidget {
-  const MyApp({
-    Key? key,
-    required this.authenticationRepository,
-    required this.userRepository,
-  }) : super(key: key);
-  final AuthenticationRepository authenticationRepository;
-  final UserRepository userRepository;
-  @override
-  Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationRepository,
-      child: BlocProvider(
-          create: (_) =>
-           AuthenticationBloc(
-                authenticationRepository: authenticationRepository,
-                userRepository: userRepository,
-              ),
-          child: MaterialApp(
-            title: 'Image Sequence Animator Demo',
-            theme: ThemeData(
-                primarySwatch: Colors.blue,
-                scaffoldBackgroundColor: Colors.black),
-            initialRoute: '/',
-            routes: {
-              '/': (context) => const SplashPage(),
-              '/welcome': (context) => const WelcomePage(),
-              '/registerOptions': (context) => const RegisterOptions(),
-              '/login': (context) => const LoginPage()
-            },
-          )),
-    );
-  }
-}*/
-
-
