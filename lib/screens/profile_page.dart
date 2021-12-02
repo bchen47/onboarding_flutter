@@ -14,17 +14,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-//  BlocBuilder<AuthenticationBloc, AuthenticationState>(
-//             builder: (context, state) {
-//           BlocProvider.of<UserBloc>(context);
-
-//           context
-//               .read<AuthenticationBloc>()
-//               .add(GetProfile(state.token.accessToken));
-//           return Scaffold(body: home());
-//         }
-
-    return Scaffold(body: home());
+    return Scaffold(body: SafeArea(child: home()));
   }
 
   static const TextStyle optionStyle =
@@ -34,41 +24,35 @@ class ProfilePage extends StatelessWidget {
 
   Widget home() {
     return SingleChildScrollView(
-        child: Container(
-            margin: const EdgeInsets.only(top: 25.0),
-            child: Column(children: [
-              profileInfo(),
-              Container(
-                  color: Colors.black,
-                  margin: const EdgeInsets.only(top: 30),
-                  child: Container(
-                      margin: const EdgeInsets.only(top: 20, bottom: 20),
-                      child:
-                          BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                        builder: (context, state) {
-                          return ElevatedButton(
-                              style: ButtonStyle(
-                                  padding: MaterialStateProperty.all(
-                                      const EdgeInsets.only(
-                                          right: 40.0, left: 40.0)),
-                                  shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                          side: const BorderSide(
-                                              color: Colors.orange, width: 1),
-                                          borderRadius:
-                                              BorderRadius.circular(30.0))),
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.transparent)),
-                              onPressed: () => {
-                                    context
-                                        .read<AuthenticationBloc>()
-                                        .add(AuthenticationLogoutRequested())
-                                  },
-                              child: const Text("CERRAR SESIÓN"));
-                        },
-                      )))
-            ])));
+        child: Column(children: [
+      profileInfo(),
+      Container(
+          color: Colors.black,
+          margin: const EdgeInsets.only(top: 30),
+          child: Container(
+              margin: const EdgeInsets.only(top: 20, bottom: 20),
+              child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+                  return ElevatedButton(
+                      style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.only(right: 40.0, left: 40.0)),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  side: const BorderSide(
+                                      color: Colors.orange, width: 1),
+                                  borderRadius: BorderRadius.circular(30.0))),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.transparent)),
+                      onPressed: () => {
+                            context
+                                .read<AuthenticationBloc>()
+                                .add(AuthenticationLogoutRequested())
+                          },
+                      child: const Text("CERRAR SESIÓN"));
+                },
+              )))
+    ]));
   }
 
   Widget profileInfo() {

@@ -51,10 +51,12 @@ class TrainingIndividualClassPage extends StatelessWidget {
   }
 
   Widget home(context, state) {
-    return Container(
-        child: state.classes.attributes.isNotEmpty
-            ? card(context, state.classes.attributes)
-            : const Center(child: CircularProgressIndicator()));
+    return SafeArea(
+      child: Container(
+          child: state.classes.attributes.isNotEmpty
+              ? card(context, state.classes.attributes)
+              : const Center(child: CircularProgressIndicator())),
+    );
   }
 
   Widget _loader(BuildContext context, String url) {
@@ -94,71 +96,73 @@ class TrainingIndividualClassPage extends StatelessWidget {
   }
 
   Widget buttons(context, trainingClass) {
-    return Container(
-        alignment: Alignment.bottomCenter,
-        child: Column(children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.transparent,
-              minimumSize: const Size.fromHeight(
-                  40), // fromHeight use double.infinity as width and 40 is the height
+    return Center(
+      child: Container(
+          alignment: Alignment.bottomCenter,
+          child: Column(children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent,
+                minimumSize: const Size.fromHeight(
+                    40), // fromHeight use double.infinity as width and 40 is the height
+              ),
+              onPressed: () {},
+              child: const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Text('RESULTADOS',
+                    style: TextStyle(fontSize: 14, color: Colors.grey)),
+              ),
             ),
-            onPressed: () {},
-            child: const Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Text('RESULTADOS',
-                  style: TextStyle(fontSize: 14, color: Colors.grey)),
-            ),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.orange,
-              minimumSize: const Size.fromHeight(
-                  40), // fromHeight use double.infinity as width and 40 is the height
-            ),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WebViewPlayer(
-                        token: context
-                            .read<AuthenticationBloc>()
-                            .state
-                            .token
-                            .accessToken
-                            .toString(),
-                        data: trainingClass),
-                  ));
-            },
-            child: const SafeArea(
-              child: Padding(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.orange,
+                minimumSize: const Size.fromHeight(
+                    40), // fromHeight use double.infinity as width and 40 is the height
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WebViewPlayer(
+                          token: context
+                              .read<AuthenticationBloc>()
+                              .state
+                              .token
+                              .accessToken
+                              .toString(),
+                          data: trainingClass),
+                    ));
+              },
+              child: const Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Text('REPRODUCIR'),
               ),
-            ),
-          )
-        ]));
+            )
+          ])),
+    );
   }
 
   Widget middleSide() {
-    return Container(
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-          color: Colors.grey[900] ?? Colors.grey,
-        ))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            imageButton(Icons.star, "Añadir favorito"),
-            imageButton(Icons.download, "Descargas")
-          ],
-        ));
+    return Center(
+      child: Container(
+          decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(
+            color: Colors.grey[900] ?? Colors.grey,
+          ))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              imageButton(Icons.star, "Añadir favorito"),
+              imageButton(Icons.download, "Descargas")
+            ],
+          )),
+    );
   }
 
   Widget imageButton(icon, text) {
     return Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: Row(
           children: [
             Icon(

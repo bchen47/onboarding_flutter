@@ -15,10 +15,12 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(12),
-        child: Scaffold(
-          appBar: Customs.appBar("Iniciar sesión"),
-          extendBodyBehindAppBar: true,
-          body: const LoginForm(),
+        child: SafeArea(
+          child: Scaffold(
+            appBar: Customs.appBar("Iniciar sesión"),
+            extendBodyBehindAppBar: true,
+            body: const LoginForm(),
+          ),
         ),
       ),
     );

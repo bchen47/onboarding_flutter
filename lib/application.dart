@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prueba/app_view.dart';
+import 'package:prueba/screens/app_view.dart';
 import 'package:prueba/blocs/authentication/authentication_bloc.dart';
 import 'package:prueba/blocs/home/home_bloc.dart';
 import 'package:prueba/blocs/user/user_bloc.dart';

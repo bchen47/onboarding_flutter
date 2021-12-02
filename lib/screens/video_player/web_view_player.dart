@@ -1,6 +1,7 @@
 import "dart:async";
 import 'package:flutter/material.dart';
 import 'package:bestcycling_webview/bestcycling_webview.dart';
+import 'package:flutter/services.dart';
 import './web_view_manager.dart';
 import './player_data.dart';
 
@@ -36,6 +37,11 @@ class _WebViewPlayerState extends State<WebViewPlayer>
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft
+    ]);
     webviewManager = WebviewManager(type: "cycling");
     _setupPlayer(accessToken, playerData);
     _activateListeners();
@@ -44,6 +50,7 @@ class _WebViewPlayerState extends State<WebViewPlayer>
   @override
   void dispose() {
     _disableListeners();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.dispose();
   }
 
@@ -104,7 +111,7 @@ class _WebViewPlayerState extends State<WebViewPlayer>
 
   Future<bool> _onClose(String url) async {
     // En este demo no tenemos página anterior.
-    // Navigator.of(context).pop();
+    Navigator.of(context).pop();
     return true;
   }
 
@@ -118,9 +125,9 @@ class _WebViewPlayerState extends State<WebViewPlayer>
   }
 
   Widget webView(String url) {
-    return SafeArea(
-      child: WillPopScope(
-          onWillPop: _onBackPressed,
+    return WillPopScope(
+        onWillPop: _onBackPressed,
+        child: SafeArea(
           child: WebviewScaffold(
             url: url,
             withZoom: false,
@@ -130,8 +137,8 @@ class _WebViewPlayerState extends State<WebViewPlayer>
             hidden: false,
             allowFileURLs: true,
             initialChild: _buildLoading(),
-          )),
-    );
+          ),
+        ));
   }
 
   @override
