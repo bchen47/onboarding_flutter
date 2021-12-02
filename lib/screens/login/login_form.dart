@@ -14,6 +14,7 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<LoginBloc>();
     return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state.status.isSubmissionFailure) {

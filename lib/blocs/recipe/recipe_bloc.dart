@@ -12,7 +12,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       : _recipeRepository = recipeRepository,
         super(const RecipeState._()) {
     on<RecipeChanged>(_onLoadRecipe);
-
+    on<GetRecipe>(_getRecipe);
     _recipeLoadedSuscription = recipeRepository.status.listen(
       (status) => {add(RecipeChanged(status.attributes, status.author))},
     );
@@ -33,5 +33,12 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     Emitter<RecipeState> emit,
   ) async {
     emit(state.copyWith(recipe: Recipe(event.attributes, event.trainers)));
+  }
+
+  void _getRecipe(GetRecipe event, Emitter<RecipeState> emit) {
+    Future<Recipe?> response =
+        _recipeRepository.getRecipe(event.token, event.id);
+    response.then((value) =>
+        emit(state.copyWith(recipe: Recipe(value!.attributes, value.author))));
   }
 }

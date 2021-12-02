@@ -21,20 +21,13 @@ class RecipesListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //BlocProvider.of<RecipesBloc>(context);
-
+    context.read<RecipesBloc>().add(GetRecipes(
+        context.read<AuthenticationBloc>().state.token.accessToken, category));
     return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(12),
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) {
-        context.read<RecipesBloc>().add(const RecipesChanged([]));
-
-        context
-            .read<AuthenticationBloc>()
-            .add(GetRecipes(state.token.accessToken, category));
-        return Scaffold(appBar: Customs.appBar(title), body: home(context));
-      }),
-    ));
+      body: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Scaffold(appBar: Customs.appBar(title), body: home(context))),
+    );
   }
 
   Widget home(context) {

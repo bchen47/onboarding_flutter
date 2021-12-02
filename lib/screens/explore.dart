@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prueba/blocs/recipes/recipes_bloc.dart';
+import 'package:prueba/blocs/training_list_class/training_class_bloc.dart';
 import 'package:prueba/providers/recipes_repository.dart';
 import 'package:prueba/blocs/authentication/authentication_bloc.dart';
+import 'package:prueba/providers/training_class_list_repository.dart';
 import 'package:prueba/screens/recipes/recipes_list_page.dart';
 import 'package:prueba/screens/training_list_class/training_class_list_page.dart';
 
@@ -93,14 +95,19 @@ class ExplorePage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => isTraining
-                              ? TrainingClassListPage(category: i.id.toString())
+                              ? BlocProvider(
+                                  create: (_) => TrainingClassBloc(
+                                      trainingClassRepository:
+                                          TrainingClassRepository()),
+                                  child: TrainingClassListPage(
+                                      category: i.id.toString()))
                               : BlocBuilder<AuthenticationBloc,
                                       AuthenticationState>(
                                   builder: (context, state) {
                                   return BlocProvider(
                                       create: (_) => RecipesBloc(
-                                          recipesRepository: context
-                                              .read<RecipesRepository>()),
+                                          recipesRepository:
+                                              RecipesRepository()),
                                       child: RecipesListPage(
                                           category: i.id.toString(),
                                           title: (i.above as Text)

@@ -16,3 +16,12 @@ class TrainingClassChanged extends TrainingClassEvent {
   @override
   List<Object> get props => [attributes, trainers];
 }
+
+class GetTrainingClasses extends TrainingClassEvent {
+  const GetTrainingClasses(this.token, this.category);
+
+  final String token;
+  final String category;
+  @override
+  List<Object> get props => [token, category];
+}

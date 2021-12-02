@@ -12,7 +12,7 @@ class RecipesBloc extends Bloc<RecipesEvent, RecipesState> {
       : _recipesRepository = recipesRepository,
         super(const RecipesState._()) {
     on<RecipesChanged>(_onLoadRecipes);
-
+    on<GetRecipes>(_getRecipes);
     _recipesLoadedSuscription = recipesRepository.status.listen(
       (status) => {add(RecipesChanged(status.attributes))},
     );
@@ -33,5 +33,11 @@ class RecipesBloc extends Bloc<RecipesEvent, RecipesState> {
     Emitter<RecipesState> emit,
   ) async {
     emit(state.copyWith(recipes: Recipes(event.attributes)));
+  }
+
+  void _getRecipes(GetRecipes event, Emitter<RecipesState> emit) async {
+    var response = _recipesRepository.getRecipes(event.token, event.category);
+    response
+        .then((value) => state.copyWith(recipes: Recipes(value!.attributes)));
   }
 }

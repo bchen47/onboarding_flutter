@@ -12,7 +12,7 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
       : _classRepository = classRepository,
         super(const ClassState._()) {
     on<ClassChanged>(_onLoadClass);
-
+    on<GetClass>(_getClass);
     _classLoadedSuscription = classRepository.status.listen(
       (status) => {add(ClassChanged(status.attributes, status.trainers))},
     );
@@ -33,5 +33,12 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
     Emitter<ClassState> emit,
   ) async {
     emit(state.copyWith(classes: Class(event.attributes, event.trainers)));
+  }
+
+  void _getClass(GetClass event, Emitter<ClassState> emit) {
+    Future<Class?> response =
+        _classRepository.getTrainingClass(event.token, event.id);
+    response.then((value) => emit(
+        state.copyWith(classes: Class(value!.attributes, value.trainers))));
   }
 }

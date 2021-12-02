@@ -12,6 +12,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       : _profileRepository = profileRepository,
         super(const ProfileState._()) {
     on<ProfileChanged>(_onLoadProfile);
+    on<GetProfile>(_tryGetProfile);
 
     _profileLoadedSuscription = profileRepository.status.listen(
       (status) => {add(ProfileChanged(status.attributes))},
@@ -33,5 +34,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Emitter<ProfileState> emit,
   ) async {
     emit(state.copyWith(profile: Profile(event.attributes)));
+  }
+
+  void _tryGetProfile(GetProfile event, Emitter<ProfileState> emit) async {
+    try {
+      final profile = _profileRepository.getProfile(event.token);
+      profile.then(
+          (value) => emit(state.copyWith(profile: Profile(value!.attributes))));
+    } catch (_) {
+      return null;
+    }
   }
 }

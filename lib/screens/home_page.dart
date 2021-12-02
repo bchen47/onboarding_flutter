@@ -7,7 +7,6 @@ import 'package:prueba/blocs/home/home_bloc.dart';
 import 'package:prueba/providers/profile_repository.dart';
 import 'package:prueba/screens/profile_page.dart';
 import 'package:prueba/blocs/authentication/authentication_bloc.dart';
-import 'package:prueba/providers/user_repository.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
@@ -35,19 +34,13 @@ class HomePage extends StatelessWidget {
     ),
     const ProfilePage(),
   ];
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider<HomeBloc>(
-            create: (BuildContext context) => HomeBloc(
-              userRepository: RepositoryProvider.of<UserRepository>(context),
-            ),
-          ),
           BlocProvider<ProfileBloc>(
             create: (_) => ProfileBloc(
-              profileRepository: context.read<ProfileRepository>(),
+              profileRepository: ProfileRepository(),
             ),
           ),
         ],
@@ -55,9 +48,8 @@ class HomePage extends StatelessWidget {
             builder: (context, state) {
           BlocProvider.of<UserBloc>(context);
 
-          context
-              .read<AuthenticationBloc>()
-              .add(GetProfile(state.token.accessToken));
+          context.read<ProfileBloc>().add(GetProfile(
+              context.read<AuthenticationBloc>().state.token.accessToken));
 
           return Scaffold(body: home());
         }));

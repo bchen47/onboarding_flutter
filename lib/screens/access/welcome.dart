@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prueba/blocs/login/login_bloc.dart';
+import 'package:prueba/providers/authentication_repository.dart';
 import 'package:prueba/screens/login/login_page.dart';
 import 'package:prueba/screens/register/register_page.dart';
 import 'package:prueba/utils/style.dart';
@@ -40,10 +43,22 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
       routes: {
         "/": (BuildContext context) => _buildHomeRoute(context),
-        "/login": (BuildContext context) => const LoginPage(),
+        "/login": (BuildContext context) =>
+            BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+              return BlocProvider(
+                  create: (_) => LoginBloc(
+                      authenticationRepository:
+                          context.read<AuthenticationRepository>()),
+                  child: const LoginPage());
+            }),
         "/register": (BuildContext context) => const RegisterPage(),
         "/options": (BuildContext context) => const RegisterOptions()
       },

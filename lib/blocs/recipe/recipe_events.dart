@@ -16,3 +16,12 @@ class RecipeChanged extends RecipeEvent {
   @override
   List<Object> get props => [attributes, trainers];
 }
+
+class GetRecipe extends RecipeEvent {
+  const GetRecipe(this.token, this.id);
+
+  final String token;
+  final String id;
+  @override
+  List<Object> get props => [token, id];
+}

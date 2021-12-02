@@ -27,13 +27,13 @@ class TrainingClassListPage extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
-            context
-                .read<TrainingClassBloc>()
-                .add(const TrainingClassChanged([], {}));
+            // context
+            //     .read<TrainingClassBloc>()
+            //     .add(const TrainingClassChanged([], {}));
 
-            context
-                .read<AuthenticationBloc>()
-                .add(GetTrainingClasses(state.token.accessToken, category));
+            context.read<TrainingClassBloc>().add(GetTrainingClasses(
+                context.read<AuthenticationBloc>().state.token.accessToken,
+                category));
             return Scaffold(
                 appBar: Customs.appBar("Elige un entrenamiento"),
                 body: home(context));
@@ -79,9 +79,12 @@ class TrainingClassListPage extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        TrainingIndividualClassPage(id: trainingClass["id"]),
-                  ));
+                      builder: (context) => BlocProvider(
+                            create: (_) =>
+                                ClassBloc(classRepository: ClassRepository()),
+                            child: TrainingIndividualClassPage(
+                                id: trainingClass["id"]),
+                          )));
             },
             child: topSideCard(trainingClass, trainers)),
         bottomSide(trainingClass)

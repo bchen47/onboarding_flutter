@@ -15,3 +15,14 @@ class ProfileChanged extends ProfileEvent {
   @override
   List<Object> get props => [attributes];
 }
+
+class GetProfile extends ProfileEvent {
+  const GetProfile(
+    this.token,
+  );
+
+  final String token;
+
+  @override
+  List<Object> get props => [token];
+}

@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prueba/blocs/training_class/training_class_bloc.dart';
 import 'package:prueba/blocs/recipe/recipe_bloc.dart';
 import 'package:prueba/blocs/authentication/authentication_bloc.dart';
 
@@ -20,11 +19,9 @@ class RecipeIndividualPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 1),
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
-            context.read<ClassBloc>().add(const ClassChanged({}, {}));
-
-            context
-                .read<AuthenticationBloc>()
-                .add(GetRecipe(state.token.accessToken, id));
+            context.read<RecipeBloc>().add(GetRecipe(
+                context.read<AuthenticationBloc>().state.token.accessToken,
+                id));
             return BlocBuilder<RecipeBloc, RecipeState>(
                 builder: (context, state) {
               return Scaffold(

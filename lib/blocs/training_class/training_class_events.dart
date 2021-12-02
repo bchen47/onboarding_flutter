@@ -16,3 +16,11 @@ class ClassChanged extends ClassEvent {
   @override
   List<Object> get props => [attributes, trainers];
 }
+
+class GetClass extends ClassEvent {
+  const GetClass(this.id, this.token);
+  final String id;
+  final String token;
+  @override
+  List<Object> get props => [id, token];
+}

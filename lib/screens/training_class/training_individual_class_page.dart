@@ -21,10 +21,9 @@ class TrainingIndividualClassPage extends StatelessWidget {
             child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
               context.read<ClassBloc>().add(const ClassChanged({}, {}));
+              context.read<ClassBloc>().add(GetClass(id,
+                  context.read<AuthenticationBloc>().state.token.accessToken));
 
-              context
-                  .read<AuthenticationBloc>()
-                  .add(GetTrainingClass(state.token.accessToken, id));
               return BlocBuilder<ClassBloc, ClassState>(
                   builder: (context, state) {
                 return Scaffold(
