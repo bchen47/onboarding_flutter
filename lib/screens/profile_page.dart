@@ -90,6 +90,9 @@ class ProfilePage extends StatelessWidget {
             margin: const EdgeInsets.only(top: 20.0),
           ),
           BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+            if (state.user.attributes.isEmpty) {
+              return const CircularProgressIndicator();
+            }
             return Image.network(state.user.attributes.isNotEmpty
                 ? "https://bestcycling.com/" +
                     state.user.attributes["avatar_url"]

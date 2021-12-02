@@ -28,24 +28,23 @@ class TrainingIndividualClassPage extends StatelessWidget {
                   builder: (context, state) {
                 return Scaffold(
                     appBar: appBar(
-                        state.classes.attributes["title"].toString(),
-                        state
-                            .classes
-                            .trainers[state.classes.attributes["trainer_id"]
-                                .toString()]
-                            .toString()),
+                        state.classes.attributes["title"],
+                        state.classes.trainers[
+                            state.classes.attributes["trainer_id"].toString()]),
                     body: home(context, state));
               });
             })));
   }
 
-  PreferredSizeWidget appBar(String title, String trainer) {
+  PreferredSizeWidget appBar(String? title, String? trainer) {
     return AppBar(
       elevation: 0, // 1
       backgroundColor: Colors.grey[900],
       title: Column(children: [
-        Text(title, style: TextStyle(fontSize: 16, color: Colors.grey[300])),
-        Text(trainer, style: const TextStyle(fontSize: 14, color: Colors.grey))
+        Text(title ?? "Cargando...",
+            style: TextStyle(fontSize: 16, color: Colors.grey[300])),
+        Text(trainer ?? "...",
+            style: const TextStyle(fontSize: 14, color: Colors.grey))
       ]),
       centerTitle: true,
     );
@@ -55,7 +54,7 @@ class TrainingIndividualClassPage extends StatelessWidget {
     return Container(
         child: state.classes.attributes.isNotEmpty
             ? card(context, state.classes.attributes)
-            : Container());
+            : const Center(child: CircularProgressIndicator()));
   }
 
   Widget _loader(BuildContext context, String url) {

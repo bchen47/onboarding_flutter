@@ -26,25 +26,24 @@ class RecipeIndividualPage extends StatelessWidget {
                 builder: (context, state) {
               return Scaffold(
                   appBar: appBar(
-                      state.recipe.attributes["name"].toString(),
-                      state
-                          .recipe
-                          .author[
-                              state.recipe.attributes["author_id"].toString()]
-                          .toString()),
+                      state.recipe.attributes["name"],
+                      state.recipe.author[
+                          state.recipe.attributes["author_id"].toString()]),
                   body: home(context, state));
             });
           })),
     ));
   }
 
-  PreferredSizeWidget appBar(String title, String trainer) {
+  PreferredSizeWidget appBar(String? title, String? trainer) {
     return AppBar(
       elevation: 0, // 1
       backgroundColor: Colors.grey[900],
       title: Column(children: [
-        Text(title, style: TextStyle(fontSize: 16, color: Colors.grey[300])),
-        Text(trainer, style: const TextStyle(fontSize: 14, color: Colors.grey))
+        Text(title ?? "Cargando...",
+            style: TextStyle(fontSize: 16, color: Colors.grey[300])),
+        Text(trainer ?? "...",
+            style: const TextStyle(fontSize: 14, color: Colors.grey))
       ]),
       centerTitle: true,
     );
@@ -54,7 +53,7 @@ class RecipeIndividualPage extends StatelessWidget {
     return Container(
         child: state.recipe.attributes.isNotEmpty
             ? card(context, state.recipe.attributes)
-            : Container());
+            : const Center(child: CircularProgressIndicator()));
   }
 
   Widget _loader(BuildContext context, String url) {
