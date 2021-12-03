@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:prueba/models/session.dart';
 import 'package:prueba/models/token.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -60,11 +59,7 @@ class AuthenticationRepository {
   Future<void> checkAutenticated() async {
     var accessToken = await Session.readSession("access_token");
     if (accessToken != null) {
-      Token token = Token(
-          Session.readSession("access_token").toString(),
-          Session.readSession("refresh_token").toString(),
-          Session.readSession("expires_in").toString(),
-          Session.readSession("token_type").toString());
+      var token = await Session.readToken();
       Session.saveSession(token);
       _controller.add(AuthenticationStatusLogin(
           status: AuthenticationStatus.authenticated, token: token));
