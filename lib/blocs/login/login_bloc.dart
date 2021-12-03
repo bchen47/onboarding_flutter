@@ -1,4 +1,4 @@
-import 'package:prueba/models/login.dart';
+import 'package:prueba/validators/login.dart';
 import 'package:prueba/repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
