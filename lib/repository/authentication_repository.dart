@@ -58,13 +58,13 @@ class AuthenticationRepository {
   }
 
   Future<void> checkAutenticated() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("access_token") != null) {
+    var accessToken = await Session.readSession("access_token");
+    if (accessToken != null) {
       Token token = Token(
-          prefs.getString("access_token").toString(),
-          prefs.getString("refresh_token").toString(),
-          prefs.getString("expires_in").toString(),
-          prefs.getString("token_type").toString());
+          Session.readSession("access_token").toString(),
+          Session.readSession("refresh_token").toString(),
+          Session.readSession("expires_in").toString(),
+          Session.readSession("token_type").toString());
       Session.saveSession(token);
       _controller.add(AuthenticationStatusLogin(
           status: AuthenticationStatus.authenticated, token: token));
