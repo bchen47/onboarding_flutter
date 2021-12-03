@@ -1,10 +1,10 @@
 part of 'training_class_bloc.dart';
 
-class ClassState extends Equatable {
-  const ClassState._({this.classes = Class.empty});
-  final Class classes;
-  ClassState copyWith({Class? classes}) {
-    return ClassState._(classes: classes ?? this.classes);
+class TrainingClassState extends Equatable {
+  const TrainingClassState._({this.classes = TrainingClass.empty});
+  final TrainingClass classes;
+  TrainingClassState copyWith({TrainingClass? classes}) {
+    return TrainingClassState._(classes: classes ?? this.classes);
   }
 
   @override

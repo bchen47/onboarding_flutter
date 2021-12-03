@@ -1,5 +1,5 @@
-import 'package:prueba/models/login/models.dart';
-import 'package:prueba/providers/authentication_repository.dart';
+import 'package:prueba/models/login.dart';
+import 'package:prueba/repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';

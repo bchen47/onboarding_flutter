@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:prueba/blocs/register/registro_bloc.dart';
+import 'package:prueba/blocs/register/register_bloc.dart';
 import 'package:prueba/screens/login/login_page.dart';
 import 'package:prueba/utils/style.dart';
 
@@ -15,7 +15,7 @@ class RegisterForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegistroBloc, RegistroState>(
+    return BlocListener<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (state.status.isSubmissionFailure) {
             ScaffoldMessenger.of(context)
@@ -41,15 +41,15 @@ class RegisterForm extends StatelessWidget {
   }
 
   Widget userNameField() {
-    return BlocBuilder<RegistroBloc, RegistroState>(
+    return BlocBuilder<RegisterBloc, RegisterState>(
         buildWhen: (previous, current) => previous.username != current.username,
         builder: (context, state) {
           return TextField(
             key: const Key('RegistroForm_usernameInput_textField'),
             onChanged: (username) => {
               context
-                  .read<RegistroBloc>()
-                  .add(RegistroUsernameChanged(username)),
+                  .read<RegisterBloc>()
+                  .add(RegisterUsernameChanged(username)),
             },
             style: const TextStyle(color: Colors.grey),
             decoration: InputDecoration(
@@ -68,13 +68,13 @@ class RegisterForm extends StatelessWidget {
   }
 
   Widget emailField() {
-    return BlocBuilder<RegistroBloc, RegistroState>(
+    return BlocBuilder<RegisterBloc, RegisterState>(
         buildWhen: (previous, current) => previous.email != current.email,
         builder: (context, state) {
           return TextField(
             key: const Key('RegistroForm_emailInput_textField'),
             onChanged: (email) => {
-              context.read<RegistroBloc>().add(RegistroEmailChanged(email)),
+              context.read<RegisterBloc>().add(RegisterEmailChanged(email)),
             },
             style: const TextStyle(color: Colors.grey),
             decoration: InputDecoration(
@@ -90,7 +90,7 @@ class RegisterForm extends StatelessWidget {
   }
 
   Widget passwordField() {
-    return BlocBuilder<RegistroBloc, RegistroState>(
+    return BlocBuilder<RegisterBloc, RegisterState>(
       buildWhen: (previous, current) =>
           previous.password != current.password ||
           previous.visible != current.visible,
@@ -98,8 +98,8 @@ class RegisterForm extends StatelessWidget {
         return TextField(
             key: const Key('RegistroForm_passwordInput_textField'),
             onChanged: (password) => context
-                .read<RegistroBloc>()
-                .add(RegistroPasswordChanged(password)),
+                .read<RegisterBloc>()
+                .add(RegisterPasswordChanged(password)),
             obscureText: state.visible,
             style: const TextStyle(color: Colors.grey),
             decoration: InputDecoration(
@@ -119,8 +119,8 @@ class RegisterForm extends StatelessWidget {
                     ),
                     onPressed: () {
                       context
-                          .read<RegistroBloc>()
-                          .add(RegistroVisibilityChanged(!state.visible));
+                          .read<RegisterBloc>()
+                          .add(RegisterVisibilityChanged(!state.visible));
                     })));
       },
     );
@@ -130,7 +130,7 @@ class RegisterForm extends StatelessWidget {
 class _RegistroButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegistroBloc, RegistroState>(
+    return BlocBuilder<RegisterBloc, RegisterState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status.index == FormzStatus.submissionInProgress.index
@@ -139,8 +139,8 @@ class _RegistroButton extends StatelessWidget {
                 "REGISTRARME",
                 () => {
                       context
-                          .read<RegistroBloc>()
-                          .add(const RegistroSubmitted()),
+                          .read<RegisterBloc>()
+                          .add(const RegisterSubmitted()),
                     },
                 MaterialStateProperty.all(Colors.orange));
       },

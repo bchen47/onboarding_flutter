@@ -2,24 +2,25 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:prueba/providers/training_class_repository.dart';
-import 'package:prueba/models/training_class/class.dart';
+import 'package:prueba/repository/training_class_repository.dart';
+import 'package:prueba/models/training_class.dart';
 part 'training_class_events.dart';
 part 'training_class_states.dart';
 
-class ClassBloc extends Bloc<ClassEvent, ClassState> {
-  ClassBloc({required ClassRepository classRepository})
+class TrainingClassBloc extends Bloc<ClassEvent, TrainingClassState> {
+  TrainingClassBloc({required TrainingClassRepository classRepository})
       : _classRepository = classRepository,
-        super(const ClassState._()) {
-    on<ClassChanged>(_onLoadClass);
-    on<GetClass>(_getClass);
+        super(const TrainingClassState._()) {
+    on<TrainingClassChanged>(_onLoadClass);
+    on<TrainingGetClass>(_getClass);
     _classLoadedSuscription = classRepository.status.listen(
-      (status) => {add(ClassChanged(status.attributes, status.trainers))},
+      (status) =>
+          {add(TrainingClassChanged(status.attributes, status.trainers))},
     );
   }
 
-  final ClassRepository _classRepository;
-  late StreamSubscription<Class> _classLoadedSuscription;
+  final TrainingClassRepository _classRepository;
+  late StreamSubscription<TrainingClass> _classLoadedSuscription;
 
   @override
   Future<void> close() {
@@ -29,16 +30,17 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
   }
 
   void _onLoadClass(
-    ClassChanged event,
-    Emitter<ClassState> emit,
+    TrainingClassChanged event,
+    Emitter<TrainingClassState> emit,
   ) async {
-    emit(state.copyWith(classes: Class(event.attributes, event.trainers)));
+    emit(state.copyWith(
+        classes: TrainingClass(event.attributes, event.trainers)));
   }
 
-  void _getClass(GetClass event, Emitter<ClassState> emit) {
-    Future<Class?> response =
+  void _getClass(TrainingGetClass event, Emitter<TrainingClassState> emit) {
+    Future<TrainingClass?> response =
         _classRepository.getTrainingClass(event.token, event.id);
-    response.then((value) => emit(
-        state.copyWith(classes: Class(value!.attributes, value.trainers))));
+    response.then((value) => emit(state.copyWith(
+        classes: TrainingClass(value!.attributes, value.trainers))));
   }
 }

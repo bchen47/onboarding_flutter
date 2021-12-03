@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:prueba/providers/recipe_repository.dart';
-import 'package:prueba/models/recipe/recipe.dart';
+import 'package:prueba/repository/recipe_repository.dart';
+import 'package:prueba/models/recipe.dart';
 part 'recipe_events.dart';
 part 'recipe_states.dart';
 

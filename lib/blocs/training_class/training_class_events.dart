@@ -7,8 +7,8 @@ abstract class ClassEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ClassChanged extends ClassEvent {
-  const ClassChanged(this.attributes, this.trainers);
+class TrainingClassChanged extends ClassEvent {
+  const TrainingClassChanged(this.attributes, this.trainers);
 
   final Map<String, dynamic> attributes;
   final Map<String, dynamic> trainers;
@@ -17,8 +17,8 @@ class ClassChanged extends ClassEvent {
   List<Object> get props => [attributes, trainers];
 }
 
-class GetClass extends ClassEvent {
-  const GetClass(this.id, this.token);
+class TrainingGetClass extends ClassEvent {
+  const TrainingGetClass(this.id, this.token);
   final String id;
   final String token;
   @override

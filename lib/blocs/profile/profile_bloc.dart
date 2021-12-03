@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:prueba/providers/profile_repository.dart';
+import 'package:prueba/repository/profile_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:prueba/models/profile/profile.dart';
+import 'package:prueba/models/profile.dart';
 part 'profile_events.dart';
 part 'profile_states.dart';
 
