@@ -44,9 +44,6 @@ class TrainingClassListRepository {
       List<Map<String, dynamic>> clases = [];
       Map<String, dynamic> trainers = {};
 
-      // resources.map((resource) {
-      //   clases.add(resource.attributes);
-      // });
       resources.toList().forEach((element) {
         var trainingClass = element.attributes;
         trainingClass.addAll({"id": element.id});
@@ -56,10 +53,8 @@ class TrainingClassListRepository {
         trainers
             .addAll({element.id: element.attributes["full_name"].toString()});
       });
-      //List<Map<String, dynamic>> resourc = resources.toList();
 
       _controller.add(TrainingListClass(clases, trainers));
-      //response.resource.attributes
     } else {
       throw UnAuthenticated("No ha podido cargar las clases");
     }

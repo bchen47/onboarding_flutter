@@ -46,7 +46,6 @@ class RecipesRepository {
       });
 
       _controller.add(Recipes(recipes));
-      //response.resource.attributes
     } else {
       throw UnAuthenticated("No ha podido cargar las clases");
     }

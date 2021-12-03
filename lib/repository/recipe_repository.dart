@@ -42,10 +42,8 @@ class RecipeRepository {
       response.included.toList().forEach((element) {
         author.addAll({element.id: element.attributes["full_name"].toString()});
       });
-      //List<Map<String, dynamic>> resourc = resources.toList();
 
       _controller.add(Recipe(resources, author));
-      //response.resource.attributes
     } else {
       throw UnAuthenticated("No ha podido cargar las clases");
     }

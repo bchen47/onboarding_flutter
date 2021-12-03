@@ -32,7 +32,6 @@ class ProfileRepository {
     });
     if (!response.http.isFailed && response.http.hasDocument) {
       _controller.add(Profile(response.resource.attributes));
-      //response.resource.attributes
     } else {
       throw UnAuthenticated("No ha podido cargar el perfil");
     }
