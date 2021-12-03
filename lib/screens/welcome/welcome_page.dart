@@ -7,7 +7,7 @@ import 'package:prueba/screens/login/login_page.dart';
 import 'package:prueba/screens/register/register_page.dart';
 import 'package:prueba/utils/style.dart';
 import 'package:prueba/blocs/authentication/authentication_bloc.dart';
-import 'package:prueba/screens/register/register_welcome_page.dart';
+import 'package:prueba/screens/register_welcome/register_welcome_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({
