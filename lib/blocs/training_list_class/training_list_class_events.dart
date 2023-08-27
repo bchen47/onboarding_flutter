@@ -1,5 +1,6 @@
 part of 'training_list_class_bloc.dart';
 
+//Clase que contiene los eventos del listado de clases
 abstract class TrainingListClassEvent extends Equatable {
   const TrainingListClassEvent();
 

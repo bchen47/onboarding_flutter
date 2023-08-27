@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'package:json_api/client.dart';
-import 'package:json_api/routing.dart';
 import 'package:prueba/models/recipe.dart';
 import 'package:prueba/utils/constants.dart';
+import 'package:prueba/utils/dio_singleton.dart';
 
 class UnAuthenticated implements Exception {
   String cause;
@@ -21,26 +21,17 @@ class RecipeRepository {
   Future<Recipe?> getRecipe(String accessToken, String id) async {
     if (_recipe != null) return _recipe;
     if (accessToken == "-") return null;
-    final uriDesign = StandardUriDesign(Uri.parse(apiUrl));
 
-    final client = RoutingClient(uriDesign);
-    final response =
-        await client.fetchResource('nutrition_recipes', id, headers: {
-      HttpHeaders.userAgentHeader: userAgent,
-      HttpHeaders.authorizationHeader: 'Bearer ' + accessToken,
-      HttpHeaders.contentTypeHeader: contentType,
-      'X-APP-ID': appID
-    }, include: [
-      "author"
-    ]);
-
-    if (!response.http.isFailed && response.http.hasDocument) {
-      final resources = response.resource.attributes;
+    final response = await DioSingleton().dio.get(
+          'https://apiv2.bestcycling.es/api/v2/nutrition_recipe',
+        );
+    if (response.statusCode == 200) {
+      final resources = jsonDecode(response.data)["attribute"];
 
       Map<String, dynamic> author = {};
 
-      response.included.toList().forEach((element) {
-        author.addAll({element.id: element.attributes["full_name"].toString()});
+      jsonDecode(response.data)["authors"].toList().forEach((element) {
+        author.addAll({element["id"]: element["full_name"].toString()});
       });
 
       _controller.add(Recipe(resources, author));

@@ -1,6 +1,7 @@
 import 'package:prueba/models/token.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//Modelo para gestionar los datos de sesión
 class Session {
   static void saveSession(Token token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -8,7 +8,7 @@ import 'package:prueba/blocs/authentication/authentication_bloc.dart';
 class RecipeIndividualPage extends StatelessWidget {
   final String id;
   const RecipeIndividualPage({Key? key, required id})
-      : id = id ?? "",
+      : id = '$id',
         super(key: key);
 
   @override

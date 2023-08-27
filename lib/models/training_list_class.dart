@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+//Modelo del listado de clases
 class TrainingListClass extends Equatable {
   final List<Map<String, dynamic>> attributes;
   final Map<String, dynamic> trainers;

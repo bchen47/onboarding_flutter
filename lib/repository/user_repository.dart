@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
 import 'package:prueba/models/user.dart';
 import 'package:prueba/utils/constants.dart';
+import 'package:prueba/utils/dio_singleton.dart';
 
 class UnAuthenticated implements Exception {
   String cause;
@@ -24,16 +26,11 @@ class UserRepository {
   Future<User?> getUser(String accessToken) async {
     if (_user != null) return _user;
     if (accessToken == '-') return null;
-    final uriDesign = StandardUriDesign(Uri.parse(apiUrl));
-    final client = RoutingClient(uriDesign);
-    ResourceFetched response = await client.fetchResource('user', '', headers: {
-      HttpHeaders.userAgentHeader: userAgent,
-      HttpHeaders.authorizationHeader: 'Bearer ' + accessToken,
-      HttpHeaders.contentTypeHeader: contentType,
-      'X-APP-ID': appID
-    });
-    if (!response.http.isFailed && response.http.hasDocument) {
-      _controller.add(User(response.resource.attributes));
+    final response = await DioSingleton().dio.get(
+      'https://apiv2.bestcycling.es/api/v2/user',
+    );
+    if (response.statusCode == 200) {
+      _controller.add(User(json.decode(response.data)));
     } else {
       throw UnAuthenticated("No ha podido cargar el usuario");
     }

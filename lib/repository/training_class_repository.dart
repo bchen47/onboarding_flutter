@@ -1,15 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'package:json_api/client.dart';
-import 'package:json_api/routing.dart';
 import 'package:prueba/models/training_class.dart';
 import 'package:prueba/utils/constants.dart';
+import 'package:prueba/utils/dio_singleton.dart';
 
 class UnAuthenticated implements Exception {
   String cause;
   UnAuthenticated(this.cause);
 }
 
+//Clase que contiene las peticiones a la api en relación a las clases
 class TrainingClassRepository {
   TrainingClass? _class;
   var _controller = StreamController<TrainingClass>();
@@ -21,32 +22,25 @@ class TrainingClassRepository {
   Future<TrainingClass?> getTrainingClass(String accessToken, String id) async {
     if (_class != null) return _class;
     if (accessToken == "-") return null;
-    final uriDesign = StandardUriDesign(Uri.parse(apiUrl));
 
-    final client = RoutingClient(uriDesign);
-    final response =
-        await client.fetchResource('training_classes', id, headers: {
-      HttpHeaders.userAgentHeader: userAgent,
-      HttpHeaders.authorizationHeader: 'Bearer ' + accessToken,
-      HttpHeaders.contentTypeHeader: contentType,
-      'X-APP-ID': appID
-    }, include: [
-      "trainer"
-    ]);
+    final response = await DioSingleton().dio.get(
+          'https://apiv2.bestcycling.es/api/v2/training_class',
+        );
 
-    if (!response.http.isFailed && response.http.hasDocument) {
-      final resources = response.resource.attributes;
+    if (response.statusCode == 200) {
+      final resources = jsonDecode(response.data)["attribute"];
+      //parámetros para el reproductor
       resources["isNew"] = resources["is_new"] == 1;
       resources["hasBackground"] = resources["has_background"] == 1;
       resources["isNewBlack"] = resources["is_black"] == 1;
+      //parámetros para la miniatura
       resources["image_graph"] = resources["graph"];
       resources["need_progression"] = true;
       resources["category"] = resources["category_nr"];
       Map<String, dynamic> trainers = {};
-      response.included.toList().forEach((element) {
-        trainers
-            .addAll({element.id: element.attributes["full_name"].toString()});
-        resources["trainer"] = element.attributes["full_name"].toString();
+      jsonDecode(response.data)["trainers"].toList().forEach((element) {
+        trainers.addAll({element["id"]: element["full_name"].toString()});
+        resources["trainer"] = element["full_name"].toString();
       });
       _controller.add(TrainingClass(resources, trainers));
     } else {

@@ -7,6 +7,7 @@ import 'package:prueba/models/recipes.dart';
 part 'recipes_events.dart';
 part 'recipes_states.dart';
 
+//Clase que contiene la implementación de los métodos del listado de recetas
 class RecipesBloc extends Bloc<RecipesEvent, RecipesState> {
   RecipesBloc({required RecipesRepository recipesRepository})
       : _recipesRepository = recipesRepository,
@@ -37,7 +38,10 @@ class RecipesBloc extends Bloc<RecipesEvent, RecipesState> {
 
   void _getRecipes(GetRecipes event, Emitter<RecipesState> emit) async {
     var response = _recipesRepository.getRecipes(event.token, event.category);
-    response
-        .then((value) => state.copyWith(recipes: Recipes(value!.attributes)));
+    response.then((value) {
+      if (value != null) {
+        state.copyWith(recipes: Recipes(value.attributes));
+      }
+    });
   }
 }

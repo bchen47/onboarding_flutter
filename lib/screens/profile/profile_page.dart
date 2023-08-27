@@ -78,8 +78,7 @@ class ProfilePage extends StatelessWidget {
               return const CircularProgressIndicator();
             }
             return Image.network(state.user.attributes.isNotEmpty
-                ? "https://bestcycling.com/" +
-                    state.user.attributes["avatar_url"]
+                ?   state.user.attributes["avatar_url"]
                 : "https://images-na.ssl-images-amazon.com/images/I/41mgseqmd0L.png");
           }),
           Container(

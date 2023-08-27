@@ -10,7 +10,7 @@ import 'package:prueba/screens/web_view_player/web_view_player_page.dart';
 class TrainingIndividualClassPage extends StatelessWidget {
   final String id;
   const TrainingIndividualClassPage({Key? key, required id})
-      : id = id ?? "",
+      : id = '$id',
         super(key: key);
 
   @override

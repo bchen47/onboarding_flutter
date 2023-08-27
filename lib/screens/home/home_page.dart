@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
           BlocProvider.of<UserBloc>(context);
           context.read<UserBloc>().add(UserLogedIn(state.token.accessToken));
           context.read<ProfileBloc>().add(GetProfile(
-              context.read<AuthenticationBloc>().state.token.accessToken));
+          context.read<AuthenticationBloc>().state.token.accessToken));
 
           return Scaffold(body: home());
         }));

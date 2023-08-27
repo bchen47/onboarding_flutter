@@ -39,8 +39,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   void _tryGetProfile(GetProfile event, Emitter<ProfileState> emit) async {
     try {
       final profile = _profileRepository.getProfile(event.token);
-      profile.then(
-          (value) => emit(state.copyWith(profile: Profile(value!.attributes))));
+      profile.then((value) {
+        if (value != null) {
+          emit(state.copyWith(profile: Profile(value.attributes)));
+        }
+      });
     } catch (_) {
       return null;
     }

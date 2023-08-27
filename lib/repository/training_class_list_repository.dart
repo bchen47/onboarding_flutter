@@ -1,15 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'package:json_api/client.dart';
-import 'package:json_api/routing.dart';
 import 'package:prueba/models/training_list_class.dart';
 import 'package:prueba/utils/constants.dart';
+import 'package:prueba/utils/dio_singleton.dart';
 
 class UnAuthenticated implements Exception {
   String cause;
   UnAuthenticated(this.cause);
 }
 
+//Clase que contiene las peticiones a la api en relación al listado de clases
 class TrainingClassListRepository {
   TrainingListClass? _class;
   var _controller = StreamController<TrainingListClass>();
@@ -24,34 +25,21 @@ class TrainingClassListRepository {
       String accessToken, String category) async {
     if (_class != null) return _class;
     if (accessToken == "-") return null;
-    final uriDesign = StandardUriDesign(Uri.parse(apiUrl));
-
-    final client = RoutingClient(uriDesign);
-    final response = await client.fetchCollection('training_classes', headers: {
-      HttpHeaders.userAgentHeader: userAgent,
-      HttpHeaders.authorizationHeader: 'Bearer ' + accessToken,
-      HttpHeaders.contentTypeHeader: contentType,
-      'X-APP-ID': appID
-    }, filter: {
-      "category_nr": category
-    }, include: [
-      "trainer"
-    ]);
-
-    if (!response.http.isFailed && response.http.hasDocument) {
-      final resources = response.collection;
+    final response = await DioSingleton().dio.get(
+          'https://apiv2.bestcycling.es/api/v2/training_classes',
+        );
+    if (response.statusCode == 200) {
+      final resources = response.data;
 
       List<Map<String, dynamic>> clases = [];
       Map<String, dynamic> trainers = {};
 
-      resources.toList().forEach((element) {
-        var trainingClass = element.attributes;
-        trainingClass.addAll({"id": element.id});
+      jsonDecode(resources)["attribute"].toList().forEach((trainingClass) {
+        trainingClass.addAll({"id": trainingClass["id"]});
         clases.add(trainingClass);
       });
-      response.included.toList().forEach((element) {
-        trainers
-            .addAll({element.id: element.attributes["full_name"].toString()});
+      jsonDecode(resources)["trainers"].toList().forEach((element) {
+        trainers.addAll({element["id"]: element["full_name"].toString()});
       });
 
       _controller.add(TrainingListClass(clases, trainers));

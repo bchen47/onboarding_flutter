@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//Clase usada para mantener un estílo en la app
+
 abstract class LoginStyle {
   static const TextStyle loginText = TextStyle(
     color: Colors.white,

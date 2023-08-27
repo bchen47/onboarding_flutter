@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
-import 'package:assets_path_provider/assets_path_provider.dart';
 import 'package:path_provider/path_provider.dart';
 
 class WebviewManager {
@@ -58,7 +57,8 @@ class WebviewManager {
       html = html.replaceAll("__FIT_COVER__", "");
     }
 
-    final path = await AssetsPathProvider.getAssetPath("assets");
+    const path = "";
+    //await AssetsPathProvider.getAssetPath("assets");
     html = html.replaceAll("__ASSETS_PATH__", path);
 
     return html;

@@ -1,6 +1,5 @@
 import "dart:async";
 import 'package:flutter/material.dart';
-import 'package:bestcycling_webview/bestcycling_webview.dart';
 import 'package:flutter/services.dart';
 import './web_view_manager.dart';
 import './player_data.dart';
@@ -30,7 +29,7 @@ class _WebViewPlayerState extends State<WebViewPlayer>
 
   late final StreamSubscription onUrlChangeSubscription;
 
-  final bestcyclingWebview = BestcyclingWebview();
+  // final bestcyclingWebview = BestcyclingWebview();
 
   final Map<String, dynamic> configuration = <String, dynamic>{};
 
@@ -83,7 +82,7 @@ class _WebViewPlayerState extends State<WebViewPlayer>
 
   /// Nos ponemos a la escucha de los cambios en la URL del webview.
   _activateListeners() {
-    String lastUrl = "";
+    /* String lastUrl = "";
     onUrlChangeSubscription =
         bestcyclingWebview.onUrlChanged.listen((String? url) async {
       // Si cambia la url en el player
@@ -98,7 +97,7 @@ class _WebViewPlayerState extends State<WebViewPlayer>
           _onClose(url);
         }
       }
-    });
+    });*/
   }
 
   _disableListeners() {
@@ -109,11 +108,11 @@ class _WebViewPlayerState extends State<WebViewPlayer>
     return true;
   }
 
-  Future<bool> _onClose(String url) async {
+  /*Future<bool> _onClose(String url) async {
     // En este demo no tenemos página anterior.
     Navigator.of(context).pop();
     return true;
-  }
+  }*/
 
   Widget _buildLoading() {
     return Container(
@@ -128,7 +127,7 @@ class _WebViewPlayerState extends State<WebViewPlayer>
     return WillPopScope(
         onWillPop: _onBackPressed,
         child: SafeArea(
-          child: WebviewScaffold(
+            child: /*WebviewScaffold(
             url: url,
             withZoom: false,
             withLocalStorage: true,
@@ -137,8 +136,8 @@ class _WebViewPlayerState extends State<WebViewPlayer>
             hidden: false,
             allowFileURLs: true,
             initialChild: _buildLoading(),
-          ),
-        ));
+          ),*/
+                Container()));
   }
 
   @override

@@ -46,14 +46,8 @@ dependencies:
   cached_network_image: ^3.1.0+1
   intl: ^0.17.0
   path_provider: ^2.0.7
-  bestcycling_webview:
-    git:
-      url: git@bitbucket.org:axtro/bestcycling_webview.git
-      ref: v3.1.0-nullsafety.1
-  assets_path_provider:
-    git:
-      url: git@bitbucket.org:axtro/assets_path_provider.git
-      ref: v1.1.0-nullsafety.2
+  dio: ^4.0.6
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

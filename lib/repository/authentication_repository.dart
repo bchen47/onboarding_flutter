@@ -1,16 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:prueba/models/session.dart';
 import 'package:prueba/models/token.dart';
+import 'package:prueba/utils/dio_singleton.dart';
 
+//Enumeradores con el estado de las autenticaciones
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
+//Clase que en caso de que falle la autenticación salta esta excepción
 class UnAuthenticated implements Exception {
   String cause;
   UnAuthenticated(this.cause);
 }
 
+//Clase que contiene el estado del login
 class AuthenticationStatusLogin {
   AuthenticationStatus status;
   Token token;
@@ -20,6 +23,7 @@ class AuthenticationStatusLogin {
 
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatusLogin>();
+  final dio = DioSingleton().dio; // Create a Dio instance
 
   Stream<AuthenticationStatusLogin> get status {
     return _controller.stream;
@@ -30,18 +34,22 @@ class AuthenticationRepository {
     required String password,
   }) async {
     var url = Uri.parse('https://apiv2.bestcycling.es/oauth/token');
-    var response = await http.post(url, body: {
-      'grant_type': 'password',
-      'client_id': '1d665fac3ced84d799e615f5d5a2c1af',
-      'username': username,
-      'password': password
-    });
+    var response = await dio.post(
+      url.toString(),
+      data: {
+        'grant_type': 'password',
+        'client_id': '1d665fac3ced84d799e615f5d5a2c1af',
+        'username': username,
+        'password': password,
+      },
+    );
+
     if (response.statusCode == 200) {
       Session.saveSession(Token(
-          jsonDecode(response.body)["access_token"],
-          jsonDecode(response.body)["refresh_token"],
-          jsonDecode(response.body)["expires_in"].toString(),
-          jsonDecode(response.body)["token_type"]));
+          jsonDecode(response.data)["access_token"],
+          jsonDecode(response.data)["refresh_token"],
+          jsonDecode(response.data)["expires_in"].toString(),
+          jsonDecode(response.data)["token_type"]));
       _controller.add(AuthenticationStatusLogin(
         status: AuthenticationStatus.authenticated,
       ));

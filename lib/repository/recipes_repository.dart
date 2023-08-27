@@ -1,15 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'package:json_api/client.dart';
-import 'package:json_api/routing.dart';
 import 'package:prueba/models/recipes.dart';
 import 'package:prueba/utils/constants.dart';
+import 'package:prueba/utils/dio_singleton.dart';
 
 class UnAuthenticated implements Exception {
   String cause;
   UnAuthenticated(this.cause);
 }
 
+//Clase que contiene las peticiones a la api en relación al listado de recetas
 class RecipesRepository {
   Recipes? _class;
   var _controller = StreamController<Recipes>();
@@ -21,27 +22,17 @@ class RecipesRepository {
   Future<Recipes?> getRecipes(String accessToken, String category) async {
     if (_class != null) return _class;
     if (accessToken == "-") return null;
-    final uriDesign = StandardUriDesign(Uri.parse(apiUrl));
-
-    final client = RoutingClient(uriDesign);
-    final response =
-        await client.fetchCollection('nutrition_recipes', headers: {
-      HttpHeaders.userAgentHeader: userAgent,
-      HttpHeaders.authorizationHeader: 'Bearer ' + accessToken,
-      HttpHeaders.contentTypeHeader: contentType,
-      'X-APP-ID': appID
-    }, filter: {
-      category: "true"
-    });
-
-    if (!response.http.isFailed && response.http.hasDocument) {
-      final resources = response.collection;
+    final response = await DioSingleton().dio.get(
+          'https://apiv2.bestcycling.es/api/v2/nutrition_recipes',
+        );
+    if (response.statusCode == 200) {
+      final resources = jsonDecode(response.data);
 
       List<Map<String, dynamic>> recipes = [];
 
       resources.toList().forEach((element) {
-        var recipe = element.attributes;
-        recipe.addAll({"id": element.id});
+        var recipe = element;
+        recipe.addAll({"id": element["id"]});
         recipes.add(recipe);
       });
 

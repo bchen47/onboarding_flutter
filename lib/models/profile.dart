@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+//Modelo de datos del perfil
 class Profile extends Equatable {
   final Map<String, dynamic> attributes;
 

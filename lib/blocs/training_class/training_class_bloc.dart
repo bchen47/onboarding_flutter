@@ -40,7 +40,11 @@ class TrainingClassBloc extends Bloc<ClassEvent, TrainingClassState> {
   void _getClass(TrainingGetClass event, Emitter<TrainingClassState> emit) {
     Future<TrainingClass?> response =
         _classRepository.getTrainingClass(event.token, event.id);
-    response.then((value) => emit(state.copyWith(
-        classes: TrainingClass(value!.attributes, value.trainers))));
+    response.then((value) {
+      if (value != null) {
+        emit(state.copyWith(
+            classes: TrainingClass(value.attributes, value.trainers)));
+      }
+    });
   }
 }

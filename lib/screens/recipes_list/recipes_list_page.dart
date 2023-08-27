@@ -85,9 +85,7 @@ class RecipesListPage extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(recipes["minutes_time"].toString() + "' min",
             style: const TextStyle(fontSize: 12, color: Colors.grey)),
-        Text(
-            (recipes["nutrients"][0]["value"] as double).round().toString() +
-                " kcal",
+        Text((recipes["nutrients"][0]["value"]).round().toString() + " kcal",
             style: const TextStyle(fontSize: 12, color: Colors.grey)),
         Text(recipes["difficulty_name"].toString(),
             style: const TextStyle(fontSize: 12, color: Colors.grey)),

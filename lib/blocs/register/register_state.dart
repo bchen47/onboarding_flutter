@@ -8,6 +8,7 @@ class RegisterState extends Equatable {
       this.email = const Email.pure(),
       this.visible = true});
 
+  //FormzStatus nos permitirá gestionar los errores del formulario
   final FormzStatus status;
   final Username username;
   final Password password;

@@ -6,6 +6,7 @@ import 'package:prueba/repository/user_repository.dart';
 part 'register_event.dart';
 part 'register_state.dart';
 
+//Clase que contiene la implementación de los métodos de la pantalla de registro
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc() : super(const RegisterState()) {
     on<RegisterUsernameChanged>(_onUsernameChanged);

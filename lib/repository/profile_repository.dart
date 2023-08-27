@@ -1,15 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'package:json_api/client.dart';
-import 'package:json_api/routing.dart';
 import 'package:prueba/models/profile.dart';
 import 'package:prueba/utils/constants.dart';
+import 'package:prueba/utils/dio_singleton.dart';
 
 class UnAuthenticated implements Exception {
   String cause;
   UnAuthenticated(this.cause);
 }
 
+//Clase que contiene las peticiones respecto al perfil
 class ProfileRepository {
   Profile? _profile;
   var _controller = StreamController<Profile>();
@@ -21,17 +22,11 @@ class ProfileRepository {
   Future<Profile?> getProfile(String accessToken) async {
     if (_profile != null) return _profile;
     if (accessToken == "-") return null;
-    final uriDesign = StandardUriDesign(Uri.parse(apiUrl));
-    final client = RoutingClient(uriDesign);
-    ResourceFetched response =
-        await client.fetchResource('profile', '', headers: {
-      HttpHeaders.userAgentHeader: userAgent,
-      HttpHeaders.authorizationHeader: 'Bearer ' + accessToken,
-      HttpHeaders.contentTypeHeader: contentType,
-      'X-APP-ID': '1d665fac3ced84d799e615f5d5a2c1af'
-    });
-    if (!response.http.isFailed && response.http.hasDocument) {
-      _controller.add(Profile(response.resource.attributes));
+    final response = await DioSingleton().dio.get(
+          'https://apiv2.bestcycling.es/api/v2/profile',
+        );
+    if (response.statusCode == 200) {
+      _controller.add(Profile(json.decode(response.data)));
     } else {
       throw UnAuthenticated("No ha podido cargar el perfil");
     }

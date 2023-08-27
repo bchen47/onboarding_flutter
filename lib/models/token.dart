@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+//Modelo para el token de acceso
 class Token extends Equatable {
   const Token(
       this.accessToken, this.refreshToken, this.expiresIn, this.tokenType);

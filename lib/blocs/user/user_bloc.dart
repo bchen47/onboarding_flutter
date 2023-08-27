@@ -8,6 +8,7 @@ import 'package:equatable/equatable.dart';
 part 'user_event.dart';
 part 'user_state.dart';
 
+//implementación de los métodos del controller de Usuarios
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc({required UserRepository userRepository})
       : _userRepository = userRepository,

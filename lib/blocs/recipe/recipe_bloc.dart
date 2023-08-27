@@ -7,6 +7,7 @@ import 'package:prueba/models/recipe.dart';
 part 'recipe_events.dart';
 part 'recipe_states.dart';
 
+//Clase que contiene la implementación de los métodos de las recetas
 class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   RecipeBloc({required RecipeRepository recipeRepository})
       : _recipeRepository = recipeRepository,
@@ -38,7 +39,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   void _getRecipe(GetRecipe event, Emitter<RecipeState> emit) {
     Future<Recipe?> response =
         _recipeRepository.getRecipe(event.token, event.id);
-    response.then((value) =>
-        emit(state.copyWith(recipe: Recipe(value!.attributes, value.author))));
+    response.then((value) {
+      if (value != null) {
+        emit(state.copyWith(recipe: Recipe(value.attributes, value.author)));
+      }
+    });
   }
 }
